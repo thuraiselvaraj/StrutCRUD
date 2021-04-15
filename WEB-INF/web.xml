@@ -1,0 +1,50 @@
+<web-app>
+
+<servlet>
+   <servlet-name>hello</servlet-name>
+   <jsp-file>/WEB-INF/src/views/index.jsp</jsp-file>
+</servlet>
+<servlet-mapping>
+  <servlet-name>hello</servlet-name>
+  <url-pattern>/index.jsp</url-pattern>
+</servlet-mapping>
+
+<servlet>
+   <servlet-name>hello2</servlet-name>
+   <jsp-file>/WEB-INF/src/views/hello.jsp</jsp-file>
+</servlet>
+<servlet-mapping>
+  <servlet-name>hello2</servlet-name>
+  <url-pattern>/hello.jsp</url-pattern>
+</servlet-mapping>
+<!-- 
+<servlet>
+   <servlet-name>login</servlet-name>
+   <jsp-file>/WEB-INF/src/views/login_page.jsp</jsp-file>
+</servlet>
+<servlet-mapping>
+  <servlet-name>login</servlet-name>
+  <url-pattern>/login.jsp</url-pattern>
+</servlet-mapping> -->
+
+
+<servlet>
+   <servlet-name>login</servlet-name>
+   <jsp-file>/WEB-INF/src/views/dummy1.jsp</jsp-file>
+</servlet>
+<servlet-mapping>
+  <servlet-name>login</servlet-name>
+  <url-pattern>/dummy1.jsp</url-pattern>
+</servlet-mapping>
+
+<filter>
+		<filter-name>struts2</filter-name>
+		<filter-class>org.apache.struts2.dispatcher.filter.StrutsPrepareAndExecuteFilter</filter-class>
+	</filter>
+
+<filter-mapping>
+		<filter-name>struts2</filter-name>
+		<url-pattern>/*</url-pattern>
+</filter-mapping>
+
+</web-app>
