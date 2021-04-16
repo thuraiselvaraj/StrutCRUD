@@ -26,7 +26,7 @@ public class LoginAction extends ActionCommon{
         return UserType;
     }
 
-    public Byte setUserType(byte Id){
+    public Byte setUserType(byte UserType){
        this.UserType=UserType;
         }
 

@@ -1,0 +1,15 @@
+{
+    "files.autoSave": "afterDelay",
+    "editor.suggestSelection": "first",
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "files.autoGuessEncoding": true,
+    "explorer.confirmDelete": false,
+    "java.codeGeneration.generateComments": true,
+    "java.home": "/home/local/ZOHOCORP/chella-pt3956/Downloads/jdk-11.0.10+9",
+    "files.exclude": {
+        "**/.classpath": true,
+        "**/.project": true,
+        "**/.settings": true,
+        "**/.factorypath": true
+    }
+}
