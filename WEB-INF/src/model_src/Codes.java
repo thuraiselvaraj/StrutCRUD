@@ -11,4 +11,17 @@ public interface Codes{
     byte STUDENT_ID_EXISTS=0x0A;
     byte NO_SUCCESS=0x0B;
     byte TAMPERED=0x0C;
+    
+    String[] Strcodes=new String[]{"ADMIN","STAFF","STUDENT","NO_LOGIN","CRED_WRONG","ERROR",
+                                  "SUCCESS","EMAIL_EXISTS","STAFF_ID_EXISTS","STUDENT_ID_EXISTS",
+                                   "NO_SUCCESS","TAMPERED"};
+
+    public static String stringify(byte b){
+        for(int i=1;i<=Strcodes.length;i++){
+            if(b==i){
+                return Strcodes[i];
+            }
+        }
+        return "ERROR";
+    }
 }

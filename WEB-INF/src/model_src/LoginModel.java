@@ -28,7 +28,7 @@ public class LoginModel implements Codes{
             byte TYPE=(byte)rs.getInt("type");
             if(laction.Email().equals(Email)){
                 if(laction.getPassword().equals(Password)){
-                    laction.setSessionId(createSession(Id,TYPE));
+                    laction.setSessionKey(createSession(Id,TYPE));
                     return TYPE;
                 }
                 else{
@@ -78,6 +78,12 @@ public class LoginModel implements Codes{
             e.printStackTrace();
         }
     }
+
+    public  getUser(String session_key){
+           
+    }
+
+    
 
 
     

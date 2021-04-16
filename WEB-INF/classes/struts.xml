@@ -22,7 +22,17 @@
         </action> -->
 
         <action name="login" class="com.actions.LoginAction" method="doLogin">
-            <result name="success">/WEB-INF/src/views/dummy2.jsp</result>
+            <result type="redirect">
+            <param name="location">WEB-INF/jsp/test/testView.jsp</param>
+            <param name="inputName">app_Id</param>
+
+            <result name="login" type="redirect">
+             <param>/Newlogin.jsp</param>
+          <result>
+</result>
         </action>
+
+        
+</result>
     </package>
 </struts>

@@ -41,8 +41,8 @@ public class AdminStaffActionCommon extends ActionSupport {
         this.StaffEducational_qualification=StaffEducational_qualification;
     }
 
-    public void doLogout(){
-        //destroy session Here.
+    public void doLogout(this){
+        
       }
 }
     

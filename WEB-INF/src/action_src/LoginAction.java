@@ -1,17 +1,23 @@
 package com.actions;
+import javax.security.auth.spi.LoginModule;
+
+import com.models.LoginModel;
+import com.models.UserMetaBean;
 import com.security.Security;
+import com.models.Codes;
 public class LoginAction extends ActionCommon{
 
     private String Email="";
     private String Password="";
-    private String SessionId="";
-    
-    public void setSessionId(String SessionId){
-        this.SessionId=SessionId;
+    private String SessionKey="";
+    public UserMetaBean UserMeta; 
+
+    public void setSessionKey(String SessionKey){
+        this.SessionKey=SessionKey;
     }
 
-    public String getSessionId(){
-        return SessionId;
+    public String getSessionKey(){
+        return SessionKey;
     }
 
     public void setEmail(String Email){
@@ -30,9 +36,13 @@ public class LoginAction extends ActionCommon{
         return Password;
     }
 
-    public String redirect(){
-           
+    public String login(){
+        LoginModel lmodel=new LoginModel();
+        return Codes.stringify(lmodel.checkIfUserExistsAndDoLogin(this));
+
     }
+
+
 
 }
 
