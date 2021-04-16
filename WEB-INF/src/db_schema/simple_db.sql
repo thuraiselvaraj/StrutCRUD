@@ -7,14 +7,15 @@ drop table if exists student_details;
 drop table if exists dept_staff_map;
 drop table if exists department;
 drop table if exists dept_stud_map;
+drop table if exists session_table;
 set foreign_key_checks=1;
 
 
 
 create table if not exists login_table(_id int auto_increment not null,
-                                        email varchar(20) unique not null,
-                                        password varchar(30) not null,
-                                        primary key(_id),
+                                        email varchar(50) unique not null,
+                                        password varchar(50) not null,
+                                        pri mary key(_id),
                                         index(email),
                                         type int
                                         );
@@ -30,7 +31,7 @@ create table if not exists staff_details(_id int,
                                          staff_id int unique,
                                          dob varchar(15),
                                          phone_no varchar(15),
-                                         education_qualification varchar(20),
+                                         educational_qualification varchar(20),
                                          foreign key(_id) references login_table(_id) on delete cascade,
                                          primary key(_id)
                                         );
@@ -60,7 +61,7 @@ create table if not exists dept_student_map(d_id int,
 
 
 create table  if not exists session_table(_id int,
-                                        session_key varchar(30),
+                                        session_key varchar(80),
                                         type int
                                         );
 

@@ -6,7 +6,7 @@ public class StaffAction extends AdminStaffActionCommon{
     public String StudentDob;
     public String StudentPhone_no;
     public String StudentDepartment;
-    public String StudentEducational_qualification;
+    public String StudentAddress;
     public Integer Student_id;
     public List<StudentList> Student_List;
     public StaffBean staffBean;   

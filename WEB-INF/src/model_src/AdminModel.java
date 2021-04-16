@@ -7,19 +7,20 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSetMetaData;
 import java.sql.PreparedStatement;
-public class AdminModel extends Codes{
+public class AdminModel implements Codes{
     Connection con;
+    ResultSet rs;
     public AdminModel(){
           con=DBConnection.getConnection();
     }
     
     public byte createStaff(AdminAction staff){
         try{
-            if(checkSidExists(staff.Staff_id)){
+            if(checkStaffIdExists(staff.Staff_Id)){
                 return STAFF_ID_EXISTS;
             
             }
-            else if(checkEmailExists(staff.StaffEmail)){
+            else if(checkStaffEmailExists(staff.StaffEmail)){
                 return EMAIL_EXISTS;
             }
             else{
@@ -27,86 +28,113 @@ public class AdminModel extends Codes{
                 String RandomPassword=Security.get_random_string();
                 //mailto(StaffEmail,RandomPassword)
                 String HashedRandomPassword=Security.get_md5(RandomPassword);
+                System.out.println(HashedRandomPassword);
                 PreparedStatement ps=con.prepareStatement("insert into login_table(email,password,type) values(?,?,?);",Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1,staff.StaffEmail);
                 ps.setString(2, HashedRandomPassword);
-                ps.setString(3, STAFF);
+                ps.setInt(3, STAFF);
                 ps.executeUpdate();
-                ResultSet rs = ps.getGeneratedKeys();
-                int Id;
+                rs = ps.getGeneratedKeys();
+                ResultSetMetaData rsmd = rs.getMetaData();
+                int columnsNumber = rsmd.getColumnCount();
+                int columnValue;
+                // while (rs.next()) {
+				// for (int i = 1; i <= columnsNumber; i++) {
+				// 	if (i > 1) System.out.print(",  ");
+				// 	columnValue = rs.getInt(i);
+				// 	System.out.print(columnValue + " " + rsmd.getColumnName(i));
+				// }
+				// System.out.println("");
+		     	// }
                 if(rs.next()){
-                    Id= rs.getInt(i);
-                }
-                ps.close();
+                int Id=rs.getInt("GENERATED_KEY");
                 rs.close();
-                ps=con.prepareStatement("insert into staff_details(_id,name,staff_id,dob,phone_no,educational_qualification)"+ 
+                 ps.close();
+                 ps=con.prepareStatement("insert into staff_details(_id,name,staff_id,dob,phone_no,educational_qualification)"+ 
                 "values(?,?,?,?,?,?);");
                  ps.setInt(1,Id);
                  ps.setString(2,staff.StaffName);
-                 ps.setInt(3,staff.Staff_id);
+                 ps.setInt(3,staff.Staff_Id);
                  ps.setString(4,staff.StaffDob);
                  ps.setString(5,staff.StaffPhone_no);
                  ps.setString(6,staff.StaffEducational_qualification);
                  ps.executeUpdate();
                  ps.close();
                  checkForDeptAndAdd(staff);
+                 con.commit();
                  }
-            con.commit();
+                 else return NO_SUCCESS;
             return SUCCESS;
+                }
         }
         catch(Exception e){
-            con.rollback();
             e.printStackTrace();
-            return ERROR;
+            try {con.rollback();}
+            catch(Exception ex){ex.printStackTrace();}
+            finally{ return ERROR;}
         }
          
     }
     public void checkForDeptAndAdd(AdminAction staff)  throws Exception{
-                ps=con.prepareStatement("select _id from department where dept=?");
+         try{   
+                // con.setAutoCommit(false);
+                PreparedStatement ps=con.prepareStatement("select _id from department where dept=?");
                 ps.setString(1,staff.StaffDepartment);
                 int dept_id;
-                if((rs=ps.execute()).next()){
+                if((rs=ps.executeQuery()).next()){
+                    System.out.println("Enter to if");
                     dept_id=rs.getInt("_id");
-                    ps.close();
-                    ps=con.prepareStatement("insert into dept_staff_map(d_id,staff_id) values(?,?);");
-                    // ps.setString(1,staff.StaffDepartment);
-                    ps.setInt(1,dept_id);
-                    ps.setInt(2,staff.Staff_id);
-                    ps.executeUpdate();
                     rs.close();
                     ps.close();
+                    ps=con.prepareStatement("insert into dept_staff_map(d_id,staff_id) values(?,?);");
+                    ps.setInt(1,dept_id);
+                    ps.setInt(2,staff.Staff_Id);
+                    ps.executeUpdate();
+                    ps.close();
+                    // con.commit();
                 }
                 else{
+                    System.out.println("Enter to else");
                     ps=con.prepareStatement("insert into department(dept) values(?);",Statement.RETURN_GENERATED_KEYS);
                     ps.setString(1,staff.StaffDepartment);
                     ps.executeUpdate();
-                    dept_id=ps.getGeneratedKeys().getInt("_id");
+                    rs=ps.getGeneratedKeys();
+                    if(rs.next()){
+                    dept_id=rs.getInt("GENERATED_KEY");
                     ps.close();
                     ps=con.prepareStatement("insert into dept_staff_map(d_id,staff_id) values(?,?);");
                     ps.setInt(1,dept_id);
-                    ps.setInt(2,staff.Staff_id);
-                    ps.executeUpdate();
+                    ps.setInt(2,staff.Staff_Id);
+                    int status=ps.executeUpdate();
+                    System.out.println(status);
                     ps.close();
+                    // con.commit();
+                    }
                 }
+            }
+                catch(Exception e){
+                    e.printStackTrace();
+                    try {con.rollback();}
+                    catch(Exception ex){ex.printStackTrace();}
+                }
+                
     }
 
-    public boolean checkStaffidExists(int Staff_id){
+    public boolean checkStaffIdExists(int Staff_Id) throws Exception{
         PreparedStatement ps=con.prepareStatement("select _id from staff_details where staff_id=?");
-        ps.setInt(1,Staff_id);
+        ps.setInt(1,Staff_Id);
         ResultSet rs=ps.executeQuery();
         return rs.next();
         
     }
 
-    public boolean checkStaffEmailExists(String StaffEmail){
-        PreparedStatement ps=con.prepareStatement("select _id from admin where email=?");
+    public boolean checkStaffEmailExists(String StaffEmail) throws Exception{
+        PreparedStatement ps=con.prepareStatement("select _id from user_login where email=?");
         ps.setString(1,StaffEmail);
-        ResultSet rs=ps.executeQuery();
+        ResultSet rs=ps.executeQuery(); 
         return rs.next() ;
     }
-
-    @Override
-    public finalize() throws Throwable{
+    public void finalize() throws Exception{
         con.close();
     }
 
@@ -128,27 +156,28 @@ public class AdminModel extends Codes{
 
     public byte updateStaff(AdminAction staff){
         try{
-            if(checkSidExists(staff.Staff_id)){
+            if(checkStaffIdExists(staff.Staff_Id)){
                 return STAFF_ID_EXISTS;
             
             }
-            else if(checkEmailExists(staff.StaffEmail)){
+            else if(checkStaffEmailExists(staff.StaffEmail)){
                 return EMAIL_EXISTS;
             }
             else{
                 con.setAutoCommit(false);
                 PreparedStatement ps=con.prepareStatement("update table staff_details set name=?,staff_id=?,dob=?,phone_no=?,educational_qualification=? where _id=?");
                  ps.setString(1,staff.StaffName);
-                 ps.setInt(2,staff.Staff_id);
+                 ps.setInt(2,staff.Staff_Id);
                  ps.setString(3,staff.StaffDob);
                  ps.setString(4,staff.StaffPhone_no);
                  ps.setString(5,staff.StaffEducational_qualification);
-                 ps.setInt(6,Id);
+                 ps.setInt(6,staff.getUserMeta().getId());
                  ps.executeUpdate();
                  checkForDeptAndAdd(staff);
                  ps=con.prepareStatement("update table login_table set email=? where _id=?;");
                  ps.setString(1,staff.StaffEmail);
-                 ps.setInt(2,staff.Id);
+                 ps.setInt(2,staff.getUserMeta().getId());
+                 ///////boooooooooommm
                  ps.executeUpdate();
                  con.commit();
                  return SUCCESS;
@@ -156,8 +185,9 @@ public class AdminModel extends Codes{
         }
         catch(Exception e){
             e.printStackTrace();
-            con.rollback();
-            return ERROR;
+            try {con.rollback();}
+            catch(Exception ex){ex.printStackTrace();}
+            finally{ return ERROR;}
         }
 
     }
@@ -170,8 +200,7 @@ public class AdminModel extends Codes{
           }
           catch(Exception e){
               e.printStackTrace();
-              return new ResultSet(){
-              };
+              return null;
           }
         }
 }

@@ -1,4 +1,5 @@
 package com.security;
+import java.util.Random;
 public class Security{
     public static String get_md5(String md5) {
         try {

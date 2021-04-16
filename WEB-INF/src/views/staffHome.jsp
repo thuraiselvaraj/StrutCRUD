@@ -9,7 +9,7 @@
     </head>
     <body>
       <p>Staff Home</p>
-      <a href="">Edit students of <s:property value="StaffDepartment"/></a>
+      <a href="">Edit students of <s:property value="UserMeta.SessionKey"/></a>
       <a href="">Edit your details</a>
       <a href="">List all students</a>
     </body>

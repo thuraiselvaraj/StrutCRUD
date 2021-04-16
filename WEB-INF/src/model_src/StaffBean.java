@@ -7,7 +7,7 @@ public class StaffBean{
     public String StaffEducational_qualification;
     public Integer Staff_id;
     public String StaffEmail;
-    public String Id;
+    public int Id;
     
     public int getId(){
             return Id;
@@ -29,7 +29,7 @@ public class StaffBean{
         return StaffDepartment;
     }
 
-    public void getStaffEducational_qualification(){
+    public String getStaffEducational_qualification(){
         return StaffEducational_qualification;
     }
 

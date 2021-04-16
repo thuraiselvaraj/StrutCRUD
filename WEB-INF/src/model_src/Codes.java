@@ -1,3 +1,4 @@
+package com.models;
 public interface Codes{
     byte ADMIN= 0x01;
     byte STAFF= 0x02;
@@ -11,16 +12,17 @@ public interface Codes{
     byte STUDENT_ID_EXISTS=0x0A;
     byte NO_SUCCESS=0x0B;
     byte TAMPERED=0x0C;
-    
+    byte NO_STUDENTS=0x0D;
+    byte EMAIL_TAMPERED=0x0E;
+    byte EMPTY_STAFF_ID=0x0F;
+
     String[] Strcodes=new String[]{"ADMIN","STAFF","STUDENT","NO_LOGIN","CRED_WRONG","ERROR",
                                   "SUCCESS","EMAIL_EXISTS","STAFF_ID_EXISTS","STUDENT_ID_EXISTS",
-                                   "NO_SUCCESS","TAMPERED"};
+                                   "NO_SUCCESS","TAMPERED","NO_STUDENTS","EMAIL_TAMPERED"};
 
     public static String stringify(byte b){
-        for(int i=1;i<=Strcodes.length;i++){
-            if(b==i){
-                return Strcodes[i];
-            }
+        if(b<=Strcodes.length){
+            return Strcodes[b-1];
         }
         return "ERROR";
     }

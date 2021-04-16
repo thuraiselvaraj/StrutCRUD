@@ -1,4 +1,5 @@
 package com.actions;
+import com.models.UserMetaBean;
 import com.opensymphony.xwork2.ActionSupport;
 //Common action class that has the common fields.
 public class AdminStaffActionCommon extends ActionSupport {
@@ -7,9 +8,18 @@ public class AdminStaffActionCommon extends ActionSupport {
     public String StaffPhone_no;
     public String StaffDepartment;
     public String StaffEducational_qualification;
-
+    public String Message="ERROR";
+    public String ActionType="";
+    public UserMetaBean UserMeta;
     public  int CurrentPage=1;
-    public  String SessionId;
+
+    public AdminStaffActionCommon(){
+        UserMeta=new UserMetaBean(); 
+   }
+
+    public UserMetaBean getUserMeta(){
+        return UserMeta;
+    } 
 
     public void setCurrentPage(int CurrentPage){
         if(CurrentPage>0){
@@ -17,8 +27,12 @@ public class AdminStaffActionCommon extends ActionSupport {
         }
     }
 
-    public void setSessionId(String SessionId){
-        this.SessionId=SessionId;
+    public void setActionType(String ActionType){
+        this.ActionType=ActionType;
+    }
+
+    public String getMessage(){
+        return Message;
     }
 
     public  void setStaffName(String StaffName){
@@ -41,8 +55,8 @@ public class AdminStaffActionCommon extends ActionSupport {
         this.StaffEducational_qualification=StaffEducational_qualification;
     }
 
-    public void doLogout(this){
+    // public void doLogout(this){
         
-      }
+    // }
 }
     

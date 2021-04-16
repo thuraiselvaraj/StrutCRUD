@@ -36,14 +36,14 @@ public byte createStudent(StaffAction student){
           }
           ps.close();
           rs.close();
-          ps=con.prepareStatement("insert into student_details(_id,name,student_id,dob,phone_no,educational_qualification)"+ 
+          ps=con.prepareStatement("insert into student_details(_id,name,student_id,dob,phone_no,address)"+ 
           "values(?,?,?,?,?,?);");
            ps.setInt(1,Id);
            ps.setString(2,student.StudentName);
            ps.setInt(3,student.Student_id);
            ps.setString(4,student.StudentDob);
            ps.setString(5,student.StudentPhone_no);
-           ps.setString(6,student.StudentEducational_qualification);
+           ps.setString(6,student.StudentAddress);
            ps.executeUpdate();
            ps.close();
            checkForDeptAndAdd(student);
@@ -179,7 +179,7 @@ public boolean checkStaffEmailExists(String StaffEmail){
 
 
 @Override
-public finalize() throws Throwable{
+public void finalize() throws Throwable{
   con.close();
 }
 

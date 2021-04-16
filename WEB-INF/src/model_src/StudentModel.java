@@ -23,7 +23,7 @@ public class StudentModel implements Codes{
     }
     
     @Override
-    public finalize() throws Throwable{
+    public void finalize() throws Throwable{
         con.close();
     }
 }
