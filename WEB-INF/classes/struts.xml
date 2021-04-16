@@ -20,5 +20,9 @@
         <!-- <action name="view" class="com.actions.DummyAction" method="execute">
             <result name="success">/WEB-INF/src/views/dummy1.jsp</result>
         </action> -->
+
+        <action name="login" class="com.actions.LoginAction" method="doLogin">
+            <result name="success">/WEB-INF/src/views/dummy2.jsp</result>
+        </action>
     </package>
 </struts>

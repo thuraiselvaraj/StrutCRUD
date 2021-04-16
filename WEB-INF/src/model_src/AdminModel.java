@@ -10,7 +10,7 @@ import java.sql.PreparedStatement;
 public class AdminModel extends Codes{
     Connection con;
     public AdminModel(){
-          con=getConnection();
+          con=DBConnection.getConnection();
     }
     
     public byte createStaff(AdminAction staff){
@@ -61,8 +61,8 @@ public class AdminModel extends Codes{
         }
          
     }
-    public void checkForDeptAndAdd(AdminAction staff){
-        ps=con.prepareStatement("select _id from department where dept=?");
+    public void checkForDeptAndAdd(AdminAction staff)  throws Exception{
+                ps=con.prepareStatement("select _id from department where dept=?");
                 ps.setString(1,staff.StaffDepartment);
                 int dept_id;
                 if((rs=ps.execute()).next()){
@@ -99,7 +99,7 @@ public class AdminModel extends Codes{
     }
 
     public boolean checkStaffEmailExists(String StaffEmail){
-        PreparedStatement ps=con.prepareStatement("select _id from staff_details where email=?");
+        PreparedStatement ps=con.prepareStatement("select _id from admin where email=?");
         ps.setString(1,StaffEmail);
         ResultSet rs=ps.executeQuery();
         return rs.next() ;
@@ -137,7 +137,7 @@ public class AdminModel extends Codes{
             }
             else{
                 con.setAutoCommit(false);
-                PreparedStatement ps=con.prepareStatement("update table employee details set name=?,staff_id=?,dob=?,phone_no=?,educational_qualification=? where _id=?");
+                PreparedStatement ps=con.prepareStatement("update table staff_details set name=?,staff_id=?,dob=?,phone_no=?,educational_qualification=? where _id=?");
                  ps.setString(1,staff.StaffName);
                  ps.setInt(2,staff.Staff_id);
                  ps.setString(3,staff.StaffDob);
@@ -146,8 +146,9 @@ public class AdminModel extends Codes{
                  ps.setInt(6,Id);
                  ps.executeUpdate();
                  checkForDeptAndAdd(staff);
-                 ps=con.prepareStatement("update table login_table(email) values(?);");
+                 ps=con.prepareStatement("update table login_table set email=? where _id=?;");
                  ps.setString(1,staff.StaffEmail);
+                 ps.setInt(2,staff.Id);
                  ps.executeUpdate();
                  con.commit();
                  return SUCCESS;
@@ -162,10 +163,15 @@ public class AdminModel extends Codes{
     }
 
     public ResultSet listStaffs(AdminAction staff){
-            PreparedStatement ps=con.prepareStatement("select * from ")
+          try{
+            PreparedStatement ps=con.prepareStatement("select staff_details.*,login_table.email, d.dept from login_table join staff_details  using(_id) join dept_staff_map s using (staff_id) join department d on d._id=s.d_id order by login_table._id limit 10 offset ?");
+            ps.setInt(1,staff.CurrentPage*10-1);
+            return ps.executeQuery();
+          }
+          catch(Exception e){
+              e.printStackTrace();
+              return new ResultSet(){
+              };
+          }
         }
-
-    
-
-
 }

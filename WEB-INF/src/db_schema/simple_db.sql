@@ -28,7 +28,7 @@ create table if not exists department(_id int auto_increment not null,
 create table if not exists staff_details(_id int,
                                          name varchar(30) not null,
                                          staff_id int unique,
-                                         dob date,
+                                         dob varchar(15),
                                          phone_no varchar(15),
                                          education_qualification varchar(20),
                                          foreign key(_id) references login_table(_id) on delete cascade,
@@ -52,14 +52,14 @@ create table if not exists student_details(_id int,
                                          primary key(_id)
                                         );
 
-create table if not exists dept_stud_map(d_id int,
+create table if not exists dept_student_map(d_id int,
                                          student_id int,
                                          foreign key(d_id) references department(_id) on delete cascade,
                                          foreign key(student_id) references student_details(student_id) on delete cascade
                                         );
 
 
-create table  if not exists user_session(_id int,
+create table  if not exists session_table(_id int,
                                         session_key varchar(30),
                                         type int
                                         );

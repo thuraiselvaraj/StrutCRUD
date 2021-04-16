@@ -8,11 +8,13 @@ public class AdminStaffActionCommon extends ActionSupport {
     public String StaffDepartment;
     public String StaffEducational_qualification;
 
-    public  int CurrentPage;
+    public  int CurrentPage=1;
     public  String SessionId;
 
     public void setCurrentPage(int CurrentPage){
+        if(CurrentPage>0){
            this.CurrentPage=CurrentPage;
+        }
     }
 
     public void setSessionId(String SessionId){

@@ -10,4 +10,5 @@ public interface Codes{
     byte STAFF_ID_EXISTS=0x09;
     byte STUDENT_ID_EXISTS=0x0A;
     byte NO_SUCCESS=0x0B;
+    byte TAMPERED=0x0C;
 }

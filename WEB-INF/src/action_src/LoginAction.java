@@ -2,9 +2,17 @@ package com.actions;
 import com.security.Security;
 public class LoginAction extends ActionCommon{
 
-    private String Email;
-    private String Password;
-    private Byte UserType;
+    private String Email="";
+    private String Password="";
+    private String SessionId="";
+    
+    public void setSessionId(String SessionId){
+        this.SessionId=SessionId;
+    }
+
+    public String getSessionId(){
+        return SessionId;
+    }
 
     public void setEmail(String Email){
         this.Email=Email;
@@ -21,14 +29,6 @@ public class LoginAction extends ActionCommon{
     public String getPassword(){
         return Password;
     }
-
-    public Byte getUserType(){
-        return UserType;
-    }
-
-    public Byte setUserType(byte UserType){
-       this.UserType=UserType;
-        }
 
     public String redirect(){
            
