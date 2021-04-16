@@ -5,34 +5,25 @@
 <struts>
     <constant name="struts.devMode" value="true" />
     <package name="basicstruts2" extends="struts-default">
-        <action name="index">
-            <result>/index.jsp</result>
-        </action>
 
-        <action name="hello" class="com.actions.HelloWorldAction" method="execute">
-            <result name="success">/WEB-INF/views/HelloWorld.jsp</result>
-        </action>
+         <action name="login" class="com.actions.LoginAction" method="login">
+         <result name="SUCCESS" type="redirect">
+         <param name="location">/WEB-INF/src/views/staffHome.jsp</param>
+         <param name="SessionKey">${UserMeta.SessionKey}</param>
+         </result>
+          
+         <result name="*" type="redirect">
+         <param name="Message">${Message}</param>
+         <param name="location">/WEB-INF/src/views/studentHome.jsp</param>
+         </result>
+         </action>
 
-        <action name="login" class="com.actions.DummyAction" method="execute">
-            <result name="success">/WEB-INF/src/views/dummy2.jsp</result>
-        </action>
+         <action name="admin" class="com.actions.AdminAction" method="exec">
+         <result name="*" type="redirect">
+         <param name="Message">${Message}</param>
+         <param name="location">/WEB-INF/src/views/adminHome.jsp</param>
+         </result>
+         </action>
 
-        <!-- <action name="view" class="com.actions.DummyAction" method="execute">
-            <result name="success">/WEB-INF/src/views/dummy1.jsp</result>
-        </action> -->
-
-        <action name="login" class="com.actions.LoginAction" method="doLogin">
-            <result type="redirect">
-            <param name="location">WEB-INF/jsp/test/testView.jsp</param>
-            <param name="inputName">app_Id</param>
-
-            <result name="login" type="redirect">
-             <param>/Newlogin.jsp</param>
-          <result>
-</result>
-        </action>
-
-        
-</result>
     </package>
 </struts>
