@@ -4,24 +4,40 @@
 		"http://struts.apache.org/dtds/struts-2.5.dtd">
 <struts>
     <constant name="struts.devMode" value="true" />
+     <constant name="struts.convention.result.path" value="/WEB-INF/views" />
     <package name="basicstruts2" extends="struts-default">
-
          <action name="login" class="com.actions.LoginAction" method="login">
-         <result name="SUCCESS" type="redirect">
-         <param name="location">/WEB-INF/src/views/staffHome.jsp</param>
+         
+         <result name="ADMIN" type="redirect">
+         <param name="location">views/adminHome.jsp</param>
+         <param name="SessionKey">${UserMeta.SessionKey}</param>
+         </result>
+
+         <result name="STUDENT" type="redirect">
+         <param name="location">views/studentHome.jsp</param>
+         <param name="SessionKey">${UserMeta.SessionKey}</param>
+         </result>
+
+         <result name="STAFF" type="redirect">
+         <param name="location">views/staffHome.jsp</param>
+         <param name="SessionKey">${UserMeta.SessionKey}</param>
+         </result>
+
+         <result name="SUCCESS">
+         <param name="location">views/adminHome.jsp</param>
          <param name="SessionKey">${UserMeta.SessionKey}</param>
          </result>
           
-         <result name="*" type="redirect">
+         <result name="ERROR" type="redirect">
+         <param name="location">/login.jsp</param>
          <param name="Message">${Message}</param>
-         <param name="location">/WEB-INF/src/views/studentHome.jsp</param>
          </result>
+
          </action>
 
-         <action name="admin" class="com.actions.AdminAction" method="exec">
+         <action name="admin"  class="com.actions.AdminAction" method="exec">
          <result name="*" type="redirect">
-         <param name="Message">${Message}</param>
-         <param name="location">/WEB-INF/src/views/adminHome.jsp</param>
+         views/adminHome.jsp?Message=${Message}
          </result>
          </action>
 
