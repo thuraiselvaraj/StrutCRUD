@@ -210,7 +210,7 @@ public byte updateStudent(StaffAction student){
       }
       else{
           con.setAutoCommit(false);
-          PreparedStatement ps=con.prepareStatement("update table employee details set name=?,student_id=?,dob=?,phone_no=?,educational_qualification=? where _id=?");
+          PreparedStatement ps=con.prepareStatement("update employee details set name=?,student_id=?,dob=?,phone_no=?,educational_qualification=? where _id=?");
            ps.setString(1,student.StudentName);
            ps.setInt(2,student.Student_id);
            ps.setString(3,student.StudentDob);
@@ -219,7 +219,7 @@ public byte updateStudent(StaffAction student){
            ps.setInt(6,Id);
            ps.executeUpdate();
            checkForDeptAndAdd(student);
-           ps=con.prepareStatement("update table login_table set email=? where _id=?;");
+           ps=con.prepareStatement("update login_table set email=? where _id=?;");
            ps.setString(1,staff.StaffEmail);
            ps.setInt(2,staff.Id);
            ps.executeUpdate();
@@ -252,7 +252,7 @@ public ResultSet listStudents(StaffAction student){
 public byte updateStaff(StaffAction staff){
     try{
             con.setAutoCommit(false);
-            PreparedStatement ps=con.prepareStatement("update table staff_details set name=?,dob=?,phone_no=?,educational_qualification=? where _id=?");
+            PreparedStatement ps=con.prepareStatement("update staff_details set name=?,dob=?,phone_no=?,educational_qualification=? where _id=?");
              ps.setString(1,staff.StaffName);
              ps.setString(2,staff.StaffDob);
              ps.setString(3,staff.StaffPhone_no);

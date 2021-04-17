@@ -15,7 +15,7 @@ set foreign_key_checks=1;
 create table if not exists login_table(_id int auto_increment not null,
                                         email varchar(50) unique not null,
                                         password varchar(50) not null,
-                                        pri mary key(_id),
+                                        primary key(_id),
                                         index(email),
                                         type int
                                         );
@@ -38,8 +38,8 @@ create table if not exists staff_details(_id int,
 
 create table if not exists dept_staff_map(d_id int,
                                          staff_id int,
-                                         foreign key(d_id) references department(_id),
-                                         foreign key(staff_id) references staff_details(staff_id) on delete cascade
+                                         foreign key(d_id) references department(_id)  on delete cascade,
+                                         foreign key(staff_id) references staff_details(staff_id) on delete cascade on update cascade
                                         );
 
 create table if not exists student_details(_id int,
@@ -56,7 +56,7 @@ create table if not exists student_details(_id int,
 create table if not exists dept_student_map(d_id int,
                                          student_id int,
                                          foreign key(d_id) references department(_id) on delete cascade,
-                                         foreign key(student_id) references student_details(student_id) on delete cascade
+                                         foreign key(student_id) references student_details(student_id) on delete cascade on update cascade
                                         );
 
 

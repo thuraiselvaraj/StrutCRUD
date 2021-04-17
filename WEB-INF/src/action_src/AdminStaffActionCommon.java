@@ -1,7 +1,9 @@
 package com.actions;
 import com.models.UserMetaBean;
 import com.opensymphony.xwork2.ActionSupport;
+import com.models.StaffBean;
 //Common action class that has the common fields.
+
 public class AdminStaffActionCommon extends ActionSupport {
     public String StaffName;
     public String StaffDob;
@@ -12,13 +14,20 @@ public class AdminStaffActionCommon extends ActionSupport {
     public String ActionType="";
     public UserMetaBean UserMeta;
     public  int CurrentPage=1;
+    public StaffBean staffBean;
 
     public AdminStaffActionCommon(){
         UserMeta=new UserMetaBean(); 
+        UserMeta.setId(11);
+        
    }
 
     public UserMetaBean getUserMeta(){
         return UserMeta;
+    } 
+
+    public StaffBean getStaffBean(){
+        return staffBean;
     } 
 
     public void setCurrentPage(int CurrentPage){

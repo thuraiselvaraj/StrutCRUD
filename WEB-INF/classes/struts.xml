@@ -4,7 +4,7 @@
 		"http://struts.apache.org/dtds/struts-2.5.dtd">
 <struts>
     <constant name="struts.devMode" value="true" />
-     <constant name="struts.convention.result.path" value="/WEB-INF/views" />
+     <!-- <constant name="struts.convention.result.path" value="/WEB-INF/views" /> -->
     <package name="basicstruts2" extends="struts-default">
          <action name="login" class="com.actions.LoginAction" method="login">
          
@@ -32,14 +32,21 @@
          <param name="location">/login.jsp</param>
          <param name="Message">${Message}</param>
          </result>
-
          </action>
-
+<!-- 
          <action name="admin"  class="com.actions.AdminAction" method="exec">
          <result name="*" type="redirect">
          views/adminHome.jsp?Message=${Message}
          </result>
-         </action>
+         </action> -->
 
+         <action name="admin"  class="com.actions.AdminAction" method="exec">
+         <result name="SUCCESS" >
+         views/editStaff.jsp    
+         </result>
+         <result name="*" type="redirect">
+         views/dummy.jsp?Message=${Message}
+         </result>
+         </action>
     </package>
 </struts>
