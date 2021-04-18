@@ -75,64 +75,59 @@ public class AdminModel implements Codes{
          
     }
     public void checkForDeptAndAdd(AdminAction staff,Integer prev_staff_id)  throws Exception{
-                // con.setAutoCommit(false);
-                PreparedStatement ps=con.prepareStatement("select _id from department where dept=?");
-                ps.setString(1,staff.StaffDepartment);
-                int dept_id;
-                if((rs=ps.executeQuery()).next()){
-                    System.out.println("Enter to if");
-                    dept_id=rs.getInt("_id");
-                    rs.close();
-                    ps.close();
-                    ps=con.prepareStatement("select * from dept_staff_map where d_id=? and staff_id=?");
-                    ps.setInt(1,dept_id);
-                    ps.setInt(2,staff.Staff_Id);
-                    if((rs=ps.executeQuery()).next()==false){
-                    rs.close();
-                    ps=con.prepareStatement("insert into dept_staff_map(d_id,staff_id) values(?,?);");
-                    System.out.println("LOgger"+dept_id+staff.Staff_Id);
-                    ps.setInt(1,dept_id);
-                    ps.setInt(2,staff.Staff_Id);
-                    ps.executeUpdate();
-                    ps.close();
-                    }
-                    else{
-                        if(prev_staff_id != null){
-                            ps=con.prepareStatement("delete from dept_staff_map where staff_id=?");
-                            ps.setInt(1,prev_staff_id);
-                            ps.executeUpdate();
-                            ps.close();
-                        }
-                    // ps=con.prepareStatement("insert into dept_staff_map(d_id,staff_id) values(?,?);");
-                    // ps.setInt(1,dept_id);
-                    // ps.setInt(2,staff.Staff_Id);
-                    // ps.executeUpdate();
-                    // ps.close();
-                    }
+        PreparedStatement ps=con.prepareStatement("select _id from department where dept=?");
+        ps.setString(1,staff.StaffDepartment);
+        int dept_id=0;
+        boolean dept_exists=false;
+        System.out.println("The prev_staff id is "+prev_staff_id+" current "+staff.Staff_Id);
+        if((rs=ps.executeQuery()).next()){
+            dept_id=rs.getInt("_id");
+            dept_exists=true;
+            rs.close();
+            ps.close();
+        }
+        if(prev_staff_id != null){
+            ps=con.prepareStatement("delete from dept_staff_map where staff_id=?");
+            ps.setInt(1,prev_staff_id);
+            System.out.println("Deleting dept" +ps);
+            ps.executeUpdate();
+            ps.close();
 
-                    // coAdminModel admin=new AdminModel();n.commit();
-                }
-                else{
-                    System.out.println("Enter to else");
-                    ps=con.prepareStatement("insert into department(dept) values(?);",Statement.RETURN_GENERATED_KEYS);
-                    ps.setString(1,staff.StaffDepartment);
-                    ps.executeUpdate();
-                    rs=ps.getGeneratedKeys();
-                    if(rs.next()){
-                    dept_id=rs.getInt("GENERATED_KEY");
-                    ps.close();
-                    ps=con.prepareStatement("insert into dept_staff_map(d_id,staff_id) values(?,?);");
-                    ps.setInt(1,dept_id);
-                    ps.setInt(2,staff.Staff_Id);
-                    int status=ps.executeUpdate();
-                    System.out.println(status);
-                    ps.close();
-                    // con.commit();
-                    }
-                }
-            }
-                
+            ps=con.prepareStatement("delete from dept_staff_map where staff_id=?");
+            ps.setInt(1,staff.Staff_Id);
+            System.out.println("Deleting dept" +ps);
+            ps.executeUpdate();
+            ps.close();
+        }
 
+        if(dept_exists==false){
+            // ps=con.prepareStatement("select * from dept_staff_map where d_id=? and staff_id=?");
+            // ps.setInt(1,dept_id);
+            // ps.setInt(2,prev_staff_id);
+            // printTable("dept_staff_map");
+            // System.out.println(ps);
+            // rs=ps.executeQuery();
+            // boolean rs_result=rs.next();
+            // System.out.println("rs_result "+rs_result);
+            // rs.close();
+            ps=con.prepareStatement("insert into department(dept) values(?);",Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1,staff.StaffDepartment);
+            ps.executeUpdate();
+            rs=ps.getGeneratedKeys();
+            if(rs.next()){
+            dept_id=rs.getInt("GENERATED_KEY");
+            ps.close();
+             }
+           }
+            ps=con.prepareStatement("insert into dept_staff_map(d_id,staff_id) values(?,?);");
+            ps.setInt(1,dept_id);
+            ps.setInt(2,staff.Staff_Id);
+            int status=ps.executeUpdate();
+            System.out.println(status);        
+            ps.close();
+       
+         
+    }      
     public boolean checkStaffIdExists(int Staff_Id) throws Exception{
         PreparedStatement ps=con.prepareStatement("select _id from staff_details where staff_id=?");
         ps.setInt(1,Staff_Id);
@@ -253,6 +248,25 @@ public class AdminModel implements Codes{
             return null;
         }
         }
+
+    public void printTable(String tableName) throws Exception{
+        PreparedStatement ps = con.prepareStatement("select * from "+tableName+";");
+        // ps.setString(1,tableName);
+        System.out.println(ps);
+        rs=ps.executeQuery();
+        ResultSetMetaData rsmd = rs.getMetaData();
+        int columnsNumber = rsmd.getColumnCount();
+        String columnValue;
+        if(rs.next()) {
+          for (int i = 1; i <= columnsNumber; i++) {
+        	if (i > 1) System.out.print(",  ");
+        	columnValue = rs.getString(i);
+            System.out.println(rsmd.getColumnName(i));
+        	System.out.print(columnValue + "=" + rsmd.getColumnName(i));
+        }
+        System.out.println("");
+         }
+    }
 
     
 }

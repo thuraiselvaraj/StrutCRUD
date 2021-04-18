@@ -18,7 +18,7 @@ public class AdminStaffActionCommon extends ActionSupport {
 
     public AdminStaffActionCommon(){
         UserMeta=new UserMetaBean(); 
-        UserMeta.setId(11);
+        UserMeta.setId(3);
         
    }
 
