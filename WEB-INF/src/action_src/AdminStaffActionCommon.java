@@ -1,9 +1,6 @@
 package com.actions;
 import com.models.UserMetaBean;
 import com.opensymphony.xwork2.ActionSupport;
-
-import javax.swing.text.View;
-
 import com.models.StaffBean;
 //Common action class that has the common fields.
 

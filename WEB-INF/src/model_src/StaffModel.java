@@ -7,6 +7,7 @@ import java.sql.ResultSetMetaData;
 import java.sql.PreparedStatement;
 
 public class StaffModel implements Codes{
+    ResultSet rs;
 public StaffModel(){
     con=DBConnection.getConnection();
 }
@@ -183,22 +184,6 @@ public void finalize() throws Throwable{
   con.close();
 }
 
-public byte deleteStudent(String StudentEmail){
-  try{
-  PreparedStatement ps = con.prepareStatement("delete from login_table where email=?");
-  ps.setString(1,StudentEmail);
-  if(ps.executeUpdate()>0){
-      return SUCCESS;
-  }
-  return NO_SUCCESS;
-  }
-  catch(Exception e){
-      e.printStackTrace();
-      return ERROR;
-  }
-
-}
-
 public byte updateStudent(StaffAction student){
   try{
       if(checkStudentIdExists(student.Student_id)){
@@ -249,6 +234,7 @@ public ResultSet listStudents(StaffAction student){
     }
 }
 
+
 public byte updateStaff(StaffAction staff){
     try{
             con.setAutoCommit(false);
@@ -270,5 +256,48 @@ public byte updateStaff(StaffAction staff){
         return ERROR;
     }
 }
+
+public void printTable(String tableName) throws Exception{
+    PreparedStatement ps = con.prepareStatement("select * from "+tableName+";");
+    // ps.setString(1,tableName);
+    System.out.println(ps);
+    rs=ps.executeQuery();
+    ResultSetMetaData rsmd = rs.getMetaData();
+    int columnsNumber = rsmd.getColumnCount();
+    String columnValue;
+    while (rs.next()) {
+            for (int i = 1; i <= columnsNumber; i++) {
+                if (i > 1) System.out.print(",  ");
+                columnValue = rs.getString(i);
+                System.out.print(columnValue + " " + rsmd.getColumnName(i));
+            }
+            System.out.println("");
+             }
+}
+
+public ResultSet getStaff(StaffAction staff){
+    try{
+        PreparedStatement ps=con.prepareStatement("select staff_details.*,login_table.email, d.dept from login_table join staff_details  using(_id) join dept_staff_map s using (staff_id) join department d on d._id=s.d_id where login_table._id=?");
+        ps.setInt(1,staff.getUserMetaBean().getId());
+        return ps.executeQuery();
+    }
+    catch(Exception e){
+        e.printStackTrace();
+        return null;
+    }
+    }
+public ResultSet getStudent(StaffAction staff){
+        try{
+            PreparedStatement ps=con.prepareStatement("select student_details.*,login_table.email, d.dept from login_table join student_details  using(_id) join dept_student_map s using (student_id) join department d on d._id=s.d_id where login_table.email=?");
+            ps.setString(1,staff.StudentEmail);
+            return ps.executeQuery();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+        }
+
+
 
 }

@@ -10,8 +10,6 @@ public class AdminAction extends AdminStaffActionCommon implements Codes{
     public String UpdateMail;
     private List<StaffBean> beanList;
  
-
-
     public AdminAction(){
         staffBean=new StaffBean();
     }
