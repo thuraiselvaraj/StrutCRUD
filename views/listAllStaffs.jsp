@@ -5,7 +5,7 @@
    </head>
    <body>
        
-<s:if test="">
+   <s:if test="beanList.size()>0">
 			<table>
 				<thead>
 					<tr style="background-color: #E0E0E1;">
@@ -19,23 +19,27 @@
                         
 					</tr>
 				</thead>
-				<s:iterator value="">
+				<s:iterator value="beanList">
 					<tr>
-						<td><s:property value="srNo" /></td>
-						<td><s:property value="uname" /></td>
-						<td><s:property value="uemail" /></td>
-						<td><s:property value="upass" /></td>
-						<td><s:property value="udeg" /></td>
+						<td><s:property value="StaffName" /></td>
+						<td><s:property value="Staff_Id" /></td>
+						<td><s:property value="StaffEmail" /></td>
+						<td><s:property value="StaffDepartment" /></td>
+						<td><s:property value="StaffDob" /></td>
+						<td><s:property value="StaffPhone_no" /></td>
+						<td><s:property value="StaffEducational_qualification" /></td>
 						<td>
-							<a href="updatedetails.action?submitType=updatedata&uemail=<s:property value="uemail"/>">
-								<button class="button-update">Update</button>
+							<a href='admin.action?ActionType=GetStaff&StaffEmail=<s:property value="StaffEmail"/>'>
+								<button class="button-update">Edit</button>
 							</a>
-							<a href="deleterecord.action?uemail=<s:property value="uemail"/>">
+							<!-- <a href='deleterecord.action?ActionType=GetStaff&StaffEmail=<s:property value="StaffEmail"/>'>
 								<button class="button-delete">Delete</button>
-							</a>
+							</a> -->
 						</td>
 					</tr>
 				</s:iterator>
+
+				
 			</table>
 		</s:if>
 		<s:else>

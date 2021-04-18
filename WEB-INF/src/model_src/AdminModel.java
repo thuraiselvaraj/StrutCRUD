@@ -87,12 +87,17 @@ public class AdminModel implements Codes{
             ps.close();
         }
         if(prev_staff_id != null){
+            printTable("dept_staff_map");
             ps=con.prepareStatement("delete from dept_staff_map where staff_id=?");
             ps.setInt(1,prev_staff_id);
-            System.out.println("Deleting dept" +ps);
+            System.out.println("Deleting dept=" +ps);
             ps.executeUpdate();
             ps.close();
 
+
+            //The table value cascades because we use fk constaint so the value alters
+            //and duplicates so delete the current staff id in the map
+            //and create a new entry
             ps=con.prepareStatement("delete from dept_staff_map where staff_id=?");
             ps.setInt(1,staff.Staff_Id);
             System.out.println("Deleting dept" +ps);
@@ -119,6 +124,7 @@ public class AdminModel implements Codes{
             ps.close();
              }
            }
+
             ps=con.prepareStatement("insert into dept_staff_map(d_id,staff_id) values(?,?);");
             ps.setInt(1,dept_id);
             ps.setInt(2,staff.Staff_Id);
@@ -228,7 +234,12 @@ public class AdminModel implements Codes{
     public ResultSet listStaffs(AdminAction staff){
           try{
             PreparedStatement ps=con.prepareStatement("select staff_details.*,login_table.email, d.dept from login_table join staff_details  using(_id) join dept_staff_map s using (staff_id) join department d on d._id=s.d_id order by login_table._id limit 10 offset ?");
-            ps.setInt(1,staff.CurrentPage*10-1);
+            if(staff.CurrentPage==1){
+            ps.setInt(1,0);
+            }
+            else{
+                ps.setInt(1,(staff.CurrentPage-1)*10);
+            }
             return ps.executeQuery();
           }
           catch(Exception e){
@@ -257,15 +268,14 @@ public class AdminModel implements Codes{
         ResultSetMetaData rsmd = rs.getMetaData();
         int columnsNumber = rsmd.getColumnCount();
         String columnValue;
-        if(rs.next()) {
-          for (int i = 1; i <= columnsNumber; i++) {
-        	if (i > 1) System.out.print(",  ");
-        	columnValue = rs.getString(i);
-            System.out.println(rsmd.getColumnName(i));
-        	System.out.print(columnValue + "=" + rsmd.getColumnName(i));
-        }
-        System.out.println("");
-         }
+        while (rs.next()) {
+				for (int i = 1; i <= columnsNumber; i++) {
+					if (i > 1) System.out.print(",  ");
+					columnValue = rs.getString(i);
+					System.out.print(columnValue + " " + rsmd.getColumnName(i));
+				}
+				System.out.println("");
+		     	}
     }
 
     

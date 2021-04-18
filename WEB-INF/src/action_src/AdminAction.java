@@ -3,11 +3,12 @@ import com.models.AdminModel;
 import com.models.Codes;
 import java.sql.ResultSet;
 import com.models.StaffBean;
-
+import java.util.*;
 public class AdminAction extends AdminStaffActionCommon implements Codes{
     public Integer Staff_Id;
     public String StaffEmail;
     public String UpdateMail;
+    private List<StaffBean> beanList;
     public AdminAction(){
         staffBean=new StaffBean();
     }
@@ -15,6 +16,10 @@ public class AdminAction extends AdminStaffActionCommon implements Codes{
     public void setStaff_id(Integer Staff_Id){
        System.out.println("Inside setterSid");
         this.Staff_Id=Staff_Id;
+    }
+
+    public List<StaffBean> getBeanList(){
+        return beanList;
     }
 
     public void setStaffEmail(String StaffEmail){
@@ -92,6 +97,37 @@ public class AdminAction extends AdminStaffActionCommon implements Codes{
             return "ERROR";
          }
         }
+    public String listStaffs(){
+        beanList=new ArrayList<StaffBean>();
+        AdminModel admin=new AdminModel();
+     try{
+        ResultSet rs=admin.listStaffs(this);
+        if(rs==null){
+            System.out.println("Null");
+            return "ERROR";}
+        while(rs.next()){
+           staffBean =new StaffBean();
+           staffBean.StaffName=rs.getString("name");
+           staffBean.StaffDob=rs.getString("dob");
+           staffBean.StaffPhone_no=rs.getString("phone_no");
+           staffBean.StaffDepartment=rs.getString("dept");
+           staffBean.StaffEducational_qualification=rs.getString("educational_qualification");
+           staffBean.Staff_Id=rs.getInt("staff_id");
+           staffBean.StaffEmail=rs.getString("email");
+           beanList.add(staffBean);
+           } 
+        if(beanList.size()==0){
+            System.out.println("This no staffs");
+            return "NO_STAFFS";
+        }
+           Message="SUCCESS";
+           return Message;
+        }
+    catch(Exception e){
+        e.printStackTrace();
+        return "ERROR";
+    }
+}
     
     public String exec(){
         System.out.println("Exec "+ActionType.trim().length());
@@ -110,6 +146,11 @@ public class AdminAction extends AdminStaffActionCommon implements Codes{
             case "GetStaff":
                  System.out.println("GetStaff");
                  temp= getStaff();
+                 System.out.println(temp);
+                 return temp;
+            case "ListStaffs":
+                 System.out.println("ListStaff");
+                 temp= listStaffs();
                  System.out.println(temp);
                  return temp;
            default :

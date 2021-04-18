@@ -42,7 +42,8 @@
 
          <action name="admin"  class="com.actions.AdminAction" method="exec">
          <result name="SUCCESS" >
-         views/editStaff.jsp    
+         <!-- views/listAllStaffs.jsp     -->
+         views/editStaff.jsp
          </result>
          <result name="*" type="redirect">
          views/dummy.jsp?Message=${Message}

@@ -15,10 +15,11 @@ public interface Codes{
     byte NO_STUDENTS=0x0D;
     byte EMAIL_TAMPERED=0x0E;
     byte EMPTY_STAFF_ID=0x0F;
+    byte NO_STAFFS=0x10;
 
     String[] Strcodes=new String[]{"ADMIN","STAFF","STUDENT","NO_LOGIN","CRED_WRONG","ERROR",
                                   "SUCCESS","EMAIL_EXISTS","STAFF_ID_EXISTS","STUDENT_ID_EXISTS",
-                                   "NO_SUCCESS","TAMPERED","NO_STUDENTS","EMAIL_TAMPERED"};
+                                   "NO_SUCCESS","TAMPERED","NO_STUDENTS","EMAIL_TAMPERED","EMPTY_STAFF_ID","NO_STAFFS"};
 
     public static String stringify(byte b){
         if(b<=Strcodes.length){
