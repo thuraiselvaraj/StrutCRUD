@@ -9,8 +9,8 @@
     </head>
     <body>
       <p>Admin Home</p>
-      <a href="views/createStaff.jsp">Create staff </a>
-      <a href="">List Staff</a>
+      <a href="/StrutCRUD/views/createStaff.jsp">Create staff </a>
+      <a href="admin.action?ActionType=ListStaffs">List Staff</a>
     </body>
 </html>
    

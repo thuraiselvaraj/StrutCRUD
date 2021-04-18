@@ -32,9 +32,9 @@
 							<a href='admin.action?ActionType=GetStaff&StaffEmail=<s:property value="StaffEmail"/>'>
 								<button class="button-update">Edit</button>
 							</a>
-							<!-- <a href='deleterecord.action?ActionType=GetStaff&StaffEmail=<s:property value="StaffEmail"/>'>
+							<a href='admin.action?ActionType=DeleteStaff&StaffEmail=<s:property value="StaffEmail"/>'>
 								<button class="button-delete">Delete</button>
-							</a> -->
+							</a>
 						</td>
 					</tr>
 				</s:iterator>

@@ -8,6 +8,7 @@ drop table if exists dept_staff_map;
 drop table if exists department;
 drop table if exists dept_stud_map;
 drop table if exists session_table;
+drop table if exists update_key_map;
 set foreign_key_checks=1;
 
 
@@ -63,6 +64,9 @@ create table if not exists dept_student_map(d_id int,
 create table  if not exists session_table(_id int,
                                         session_key varchar(80),
                                         type int
+                                        );
+create table  if not exists update_key_map(_id int,
+                                        update_key varchar(80),
                                         );
 
 

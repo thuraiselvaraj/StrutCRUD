@@ -5,6 +5,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import javax.print.attribute.standard.PresentationDirection;
+
 import java.sql.ResultSetMetaData;
 import java.sql.PreparedStatement;
 public class AdminModel implements Codes{
@@ -16,9 +19,11 @@ public class AdminModel implements Codes{
     
     public byte createStaff(AdminAction staff){
         try{
+            System.out.println("check id");
             if(checkStaffIdExists(staff.Staff_Id)){
                 return STAFF_ID_EXISTS;
             }
+           
             else if(checkStaffEmailExists(staff.StaffEmail)){
                 return EMAIL_EXISTS;
             }
@@ -128,6 +133,7 @@ public class AdminModel implements Codes{
             ps=con.prepareStatement("insert into dept_staff_map(d_id,staff_id) values(?,?);");
             ps.setInt(1,dept_id);
             ps.setInt(2,staff.Staff_Id);
+            System.out.println(ps);
             int status=ps.executeUpdate();
             System.out.println(status);        
             ps.close();
@@ -143,10 +149,13 @@ public class AdminModel implements Codes{
     }
 
     public boolean checkStaffEmailExists(String StaffEmail) throws Exception{
-        PreparedStatement ps=con.prepareStatement("select _id from user_login where email=?");
+        System.out.println("check email "+StaffEmail+StaffEmail.length());
+        PreparedStatement ps=con.prepareStatement("select _id from login_table where email=?");
         ps.setString(1,StaffEmail);
         ResultSet rs=ps.executeQuery(); 
-        return rs.next() ;
+        boolean emailExists=rs.next();
+        System.out.println("email exists? "+emailExists);
+        return emailExists;
     }
     public void finalize() throws Exception{
         con.close();
@@ -184,31 +193,36 @@ public class AdminModel implements Codes{
         ps.setInt(1,Staff_Id);
         ps.setInt(2,Id);
         ResultSet rs=ps.executeQuery();
+        System.out.println(ps);
         return rs.next();
         
     }
 
     public boolean checkStaffEmailExistsForUpdate(String StaffEmail,int Id) throws Exception{
-        PreparedStatement ps=con.prepareStatement("select _id from user_login where email = ? and _id != ?");
+        PreparedStatement ps=con.prepareStatement("select _id from login_table where email = ? and _id != ?");
         ps.setString(1,StaffEmail);
         ps.setInt(2,Id);
-        ResultSet rs=ps.executeQuery(); 
+        ResultSet rs=ps.executeQuery();
+        System.out.println("cheeck email on update"); 
+        System.out.println(ps);
         return rs.next() ;
     }
 
     public byte updateStaff(AdminAction staff){
+        
         try{
-            if(checkStaffIdExistsForUpdate(staff.Staff_Id,staff.getUserMeta().getId())){
+            getIdByUpdateKey(staff);
+            if(checkStaffIdExistsForUpdate(staff.Staff_Id,staff.Staff_Uid)){
                 return STAFF_ID_EXISTS;
             
             }
-            else if(checkStaffEmailExistsForUpdate(staff.StaffEmail,staff.getUserMeta().getId())){
+            else if(checkStaffEmailExistsForUpdate(staff.StaffEmail,staff.Staff_Uid)){
                 return EMAIL_EXISTS;
             }
             else{
                  con.setAutoCommit(false);
                  PreparedStatement ps=con.prepareStatement("select staff_id from staff_details where _id=?");
-                 ps.setInt(1,staff.getUserMeta().getId());
+                 ps.setInt(1,staff.Staff_Uid);
                  ResultSet rs=ps.executeQuery();
                  Integer prev_staff_id=null;
                  if(rs.next()){
@@ -220,12 +234,12 @@ public class AdminModel implements Codes{
                  ps.setString(3,staff.StaffDob);
                  ps.setString(4,staff.StaffPhone_no);
                  ps.setString(5,staff.StaffEducational_qualification);
-                 ps.setInt(6,staff.getUserMeta().getId());
+                 ps.setInt(6,staff.Staff_Uid);
                  ps.executeUpdate();
                  ps.close();
                  ps=con.prepareStatement("update login_table set email=? where _id=?;");
                  ps.setString(1,staff.StaffEmail);
-                 ps.setInt(2,staff.getUserMeta().getId());
+                 ps.setInt(2,staff.Staff_Uid);
                  ///////boooooooooommm
                  ps.executeUpdate();
                  checkForDeptAndAdd(staff,prev_staff_id);
@@ -288,6 +302,34 @@ public class AdminModel implements Codes{
 				System.out.println("");
 		     	}
     }
-
     
+    public String createUpdateKey(int Id) throws Exception{
+        PreparedStatement ps=con.prepareStatement("insert into update_key_map(_id,update_key) values(?,?);");
+        ps.setInt(1, Id);
+        String RandomPassword=Security.get_random_string();
+        String HashedRandomPassword=Security.get_md5(RandomPassword);
+        ps.setString(2, HashedRandomPassword);
+        ps.executeUpdate();
+        ps.close();
+        return HashedRandomPassword;
+    }
+
+    public void getIdByUpdateKey(AdminAction Staff) throws Exception{
+        PreparedStatement ps=con.prepareStatement("select _id from update_key_map where update_key=? ;");
+        ps.setString(1,Staff.getUpdateKey());
+        ResultSet rs=ps.executeQuery();
+        if(rs.next()){
+            Staff.Staff_Uid=rs.getInt("_id");
+            rs.close();
+            ps.close();
+            ps=con.prepareStatement("delete from  update_key_map where update_key=?;");
+            ps.setString(1,Staff.getUpdateKey());
+            ps.executeUpdate();
+            ps.close();
+        }
+        else{
+            throw new Exception();
+        }
+
+    }
 }

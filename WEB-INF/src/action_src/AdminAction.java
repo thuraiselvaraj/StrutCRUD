@@ -9,6 +9,9 @@ public class AdminAction extends AdminStaffActionCommon implements Codes{
     public String StaffEmail;
     public String UpdateMail;
     private List<StaffBean> beanList;
+ 
+
+
     public AdminAction(){
         staffBean=new StaffBean();
     }
@@ -84,6 +87,7 @@ public class AdminAction extends AdminStaffActionCommon implements Codes{
             staffBean.StaffEducational_qualification=rs.getString("educational_qualification");
             staffBean.Staff_Id=rs.getInt("staff_id");
             staffBean.StaffEmail=rs.getString("email");
+            setUpdateKey(admin.createUpdateKey(rs.getInt("_id")));
             Message="SUCCESS";
             return Message;
             } 
@@ -142,26 +146,27 @@ public class AdminAction extends AdminStaffActionCommon implements Codes{
            case "CreateStaff":
                  System.out.println("CreateStaff");
                  temp= createStaff();
-                 System.out.println(temp);
-                 return temp;
+                 System.out.println(temp+"CS");
+                 return temp+"CS";
             case "UpdateStaff":
                  System.out.println("UpdateStaff");
                  temp= updateStaff();
-                 System.out.println(temp);
-                 return temp;
+                 System.out.println(temp+"US");
+                 return temp+"US";
             case "GetStaff":
                  System.out.println("GetStaff");
                  temp= getStaff();
-                 System.out.println(temp);
-                 return temp;
+                 System.out.println(temp+"GS");
+                 return temp+"GS";
             case "ListStaffs":
                  System.out.println("ListStaff");
                  temp= listStaffs();
-                 System.out.println(temp);
-                 return temp;
+                 System.out.println(temp+"LS");
+                 return temp+"LS";
             case "DeleteStaff":
                   temp=deleteStaff();
-                  System.out.println(temp);
+                  System.out.println(temp+"DS");
+                  return temp+"DS";
            default :
                  return Message;
         }

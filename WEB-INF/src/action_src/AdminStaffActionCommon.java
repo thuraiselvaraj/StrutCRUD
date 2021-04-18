@@ -1,6 +1,9 @@
 package com.actions;
 import com.models.UserMetaBean;
 import com.opensymphony.xwork2.ActionSupport;
+
+import javax.swing.text.View;
+
 import com.models.StaffBean;
 //Common action class that has the common fields.
 
@@ -15,16 +18,25 @@ public class AdminStaffActionCommon extends ActionSupport {
     public UserMetaBean UserMeta;
     public  int CurrentPage=1;
     public StaffBean staffBean;
+    private String UpdateKey="";
+    public int Staff_Uid;
 
     public AdminStaffActionCommon(){
         UserMeta=new UserMetaBean(); 
-        UserMeta.setId(3);
-        
-   }
-
+    }
+    
     public UserMetaBean getUserMeta(){
         return UserMeta;
     } 
+
+    public String getUpdateKey(){
+        System.out.println(UpdateKey);
+        return UpdateKey;
+    }
+
+    public void setUpdateKey(String UpdateKey){
+         this.UpdateKey=UpdateKey;
+    }
 
     public StaffBean getStaffBean(){
         return staffBean;

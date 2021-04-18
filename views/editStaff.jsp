@@ -13,6 +13,7 @@
 <br/>Phone_no:     </b><input type="text" name="StaffPhone_no" value='<s:property value="staffBean.StaffPhone_no"/>'>
 <br/>Educational_qualification:</b><input type="text" name="StaffEducational_qualification" value='<s:property value="staffBean.StaffEducational_qualification"/>'>
 <br/>Staff_Id</b><input type="text" name="Staff_Id" value='<s:property value="staffBean.Staff_Id"/>'>
+<input type="hidden" name="UpdateKey" value='<s:property value="UpdateKey"/>'/>
 <button type="submit">Update</button>
 </form>
    </body>

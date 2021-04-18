@@ -41,12 +41,28 @@
          </action> -->
 
          <action name="admin"  class="com.actions.AdminAction" method="exec">
-         <result name="SUCCESS" >
-         <!-- views/listAllStaffs.jsp     -->
-         views/editStaff.jsp
+         <result name="SUCCESSCS" >
+                /views/adminHome.jsp
          </result>
+
+         <result name="SUCCESSUS" type="redirectAction">
+              /StrutCRUD/admin.action?ActionType=ListStaffs
+         </result>
+
+         <result name="SUCCESSGS" >
+                /views/editStaff.jsp
+         </result>
+
+         <result name="SUCCESSLS" >
+                /views/listAllStaffs.jsp
+         </result>
+
+          <result name="SUCCESSDS" type="redirectAction">
+              /StrutCRUD/admin.action?ActionType=ListStaffs
+         </result>
+
          <result name="*" type="redirect">
-         views/dummy.jsp?Message=${Message}
+               views/dummy.jsp?Message=${Message}
          </result>
          </action>
     </package>
