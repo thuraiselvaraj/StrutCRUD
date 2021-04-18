@@ -128,7 +128,13 @@ public class AdminAction extends AdminStaffActionCommon implements Codes{
         return "ERROR";
     }
 }
-    
+   public String deleteStaff(){
+      AdminModel admin=new AdminModel();
+      byte status=admin.deleteStaff(this.StaffEmail);  
+      Message=Codes.stringify(status);
+      return Message;
+   }
+
     public String exec(){
         System.out.println("Exec "+ActionType.trim().length());
         String temp=null;
@@ -153,10 +159,13 @@ public class AdminAction extends AdminStaffActionCommon implements Codes{
                  temp= listStaffs();
                  System.out.println(temp);
                  return temp;
+            case "DeleteStaff":
+                  temp=deleteStaff();
+                  System.out.println(temp);
            default :
                  return Message;
         }
     }
-    // public String deleteStaff(){}
+   
 
 }

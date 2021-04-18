@@ -154,13 +154,24 @@ public class AdminModel implements Codes{
 
     public byte deleteStaff(String StaffEmail){
         try{
-        PreparedStatement ps = con.prepareStatement("delete from login_table where email=?");
+        PreparedStatement ps =con.prepareStatement("select login_table._id from login_table join staff_details using(_id) where login_table.email=?");
         ps.setString(1,StaffEmail);
-        if(ps.executeUpdate()>0){
-            return SUCCESS;
-        }
+        ResultSet rs=ps.executeQuery();
+        if(rs.next()){
+        int id=rs.getInt("_id");
+        rs.close();
+        ps.close();
+            ps=con.prepareStatement("delete from login_table where _id=?");
+            ps.setInt(1,id);
+            if(ps.executeUpdate()>0){
+                ps.close();
+                return SUCCESS;
+            }
         return NO_SUCCESS;
         }
+        return EMAIL_TAMPERED;
+        }
+        
         catch(Exception e){
             e.printStackTrace();
             return ERROR;
