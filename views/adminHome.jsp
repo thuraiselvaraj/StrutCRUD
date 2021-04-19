@@ -9,8 +9,8 @@
     </head>
     <body>
       <p>Admin Home</p>
-      <a href='/StrutCRUD/admin.action?ActionType=StaForm&SessionKey=<s:property value="SessionKey"/>'>Create staff </a>
-      <a href='/StrutCRUD/admin.action?ActionType=ListStaffs&SessionKey=<s:property value="SessionKey"/>'>List Staffs</a>
+      <a href='/StrutCRUD/admin.action?ActionType=StaForm&SessionKey=<s:property value="SessionKey"/>'>Create staff </a></br>
+      <a href='/StrutCRUD/admin.action?ActionType=ListStaffs&SessionKey=<s:property value="SessionKey"/>'>List Staffs</a></br>
     </body>
 </html>
    
