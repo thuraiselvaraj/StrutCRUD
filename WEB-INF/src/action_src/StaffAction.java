@@ -227,6 +227,12 @@ public String deleteStudent(){
                 System.out.println(ActionType.trim());
                 temp= getStaff();
                 return temp+"DS";
+
+            case "GetHome":
+                return  "SUCCESSGH";
+
+            case "StuForm":
+                 return "SUCCESSSSF";
             
            default :
                  Message="Action Type not found";

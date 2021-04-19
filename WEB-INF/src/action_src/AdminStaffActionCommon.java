@@ -4,7 +4,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.models.StaffBean;
 //Common action class that has the common fields.
 
-public class AdminStaffActionCommon extends ActionSupport {
+public class AdminStaffActionCommon extends ActionSupport implements GetMeta{
     public String StaffName;
     public String StaffDob;
     public String StaffPhone_no;
@@ -17,6 +17,7 @@ public class AdminStaffActionCommon extends ActionSupport {
     public StaffBean staffBean;
     private String UpdateKey="";
     public int Staff_Uid;
+    private String SessionKey="";
 
     public AdminStaffActionCommon(){
         UserMeta=new UserMetaBean(); 
@@ -74,8 +75,12 @@ public class AdminStaffActionCommon extends ActionSupport {
         this.StaffEducational_qualification=StaffEducational_qualification;
     }
 
-    // public void doLogout(this){
-        
-    // }
+    public void setSessionKey(String SessionKey){
+        this.SessionKey=SessionKey;
+    }
+
+    public String getSessionKey(){
+        return SessionKey;
+    }
 }
     

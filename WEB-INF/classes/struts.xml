@@ -6,59 +6,66 @@
     <constant name="struts.devMode" value="true" />
      <!-- <constant name="struts.convention.result.path" value="/WEB-INF/views" /> -->
     <package name="basicstruts2" extends="struts-default">
+              <interceptors>
+              <interceptor name="sessionInterceptor" class="com.interceptors.SessionInterceptor"></interceptor> 
+              <interceptor-stack name="myStack">
+                     <interceptor-ref name="sessionInterceptor"/>
+                     <interceptor-ref name="defaultStack" />
+              </interceptor-stack>
+             </interceptors>
+
          <action name="login" class="com.actions.LoginAction" method="login">
-         
-         <result name="ADMIN" type="redirect">
-         <param name="location">views/adminHome.jsp</param>
-         <param name="SessionKey">${UserMeta.SessionKey}</param>
+        
+         <result name="ADMIN" type="redirectAction">
+         admin.action?ActionType=GetHome&amp;SessionKey=${UserMeta.SessionKey}
          </result>
 
-         <result name="STUDENT" type="redirect">
-         <param name="location">views/studentHome.jsp</param>
-         <param name="SessionKey">${UserMeta.SessionKey}</param>
+         <result name="STUDENT" type="redirectAction">
+         student.action?ActionType=GetStudent&amp;SessionKey=${UserMeta.SessionKey}
          </result>
 
-         <result name="STAFF" type="redirect">
-         <param name="location">views/staffHome.jsp</param>
-         <param name="SessionKey">${UserMeta.SessionKey}</param>
-         </result>
-
-         <result name="SUCCESS">
-         <param name="location">views/adminHome.jsp</param>
-         <param name="SessionKey">${UserMeta.SessionKey}</param>
+         <result name="STAFF" type="redirectAction">
+        staff.action?ActionType=GetHome&amp;SessionKey=${UserMeta.SessionKey}
          </result>
           
-         <result name="ERROR" type="redirect">
+         <result name="*" type="redirect">
          <param name="location">/login.jsp</param>
          <param name="Message">${Message}</param>
          </result>
+
          </action>
-<!-- 
-         <action name="admin"  class="com.actions.AdminAction" method="exec">
-         <result name="*" type="redirect">
-         views/adminHome.jsp?Message=${Message}
-         </result>
-         </action> -->
+
 
          <action name="admin"  class="com.actions.AdminAction" method="exec">
-         <result name="SUCCESSCS" >
-                /views/adminHome.jsp
+         <interceptor-ref name="myStack"></interceptor-ref>  
+         <result name="SUCCESSCS" type="redirectAction" >
+                admin.action?ActionType=GetHome&amp;SessionKey=${UserMeta.SessionKey}
          </result>
+
+         <result name="SUCCESSSF" >
+                /views/createStaff.jsp
+         </result>
+
 
          <result name="SUCCESSUS" type="redirectAction">
-              /StrutCRUD/admin.action?ActionType=ListStaffs
+              /StrutCRUD/admin.action?ActionType=ListStaffs&amp;SessionKey=${UserMeta.SessionKey}
          </result>
 
          <result name="SUCCESSGS" >
                 /views/editStaff.jsp
          </result>
+         
 
          <result name="SUCCESSLS" >
                 /views/listAllStaffs.jsp
          </result>
 
           <result name="SUCCESSDS" type="redirectAction">
-              /StrutCRUD/admin.action?ActionType=ListStaffs
+              /StrutCRUD/admin.action?ActionType=ListStaffs&amp;SessionKey=${UserMeta.SessionKey}
+         </result>
+
+         <result name="SUCCESSGH" >
+                /views/adminHome.jsp
          </result>
 
          <result name="*" type="redirect">
@@ -68,12 +75,17 @@
 
 
           <action name="staff"  class="com.actions.StaffAction" method="exec">
-         <result name="SUCCESSCSS" >
+          <interceptor-ref name="myStack"></interceptor-ref>  
+         <result name="SUCCESSCSS" type="redirectAction">
+                 staff.action?ActionType=GetHome&amp;SessionKey=${UserMeta.SessionKey}
+         </result>
+
+         <result name="SUCCESSGH" >
                 /views/staffHome.jsp
          </result>
 
          <result name="SUCCESSUSS" type="redirectAction">
-              /StrutCRUD/staff.action?ActionType=ListStudents
+              staff.action?ActionType=ListStudents&amp;SessionKey=${UserMeta.SessionKey}
          </result>
 
          <result name="SUCCESSGSS" >
@@ -85,20 +97,25 @@
          </result>
 
           <result name="SUCCESSDSS" type="redirectAction">
-              /StrutCRUD/staff.action?ActionType=ListStudents
+              staff.action?ActionType=ListStudents&amp;SessionKey=${UserMeta.SessionKey}
          </result>
 
          <result name="SUCCESSGS" >
               /views/editStaffSelf.jsp
          </result>
 
-         <result name="SUCCESSUS" >
-                /views/staffHome.jsp
+         <result name="SUCCESSUS" type="redirectAction" >
+                 staff.action?ActionType=GetHome&amp;SessionKey=${UserMeta.SessionKey}
          </result>
 
          <result name="SUCCESSDS" >
               /views/showStaff.jsp
          </result>
+
+          <result name="SUCCESSSSF" >
+                /views/createStudent.jsp
+         </result>
+
 
          <result name="*" type="redirect">
                views/dummy.jsp?Message=${Message}
@@ -106,6 +123,7 @@
          </action>
 
          <action name="student"  class="com.actions.StudentAction" method="exec">
+         <interceptor-ref name="myStack"></interceptor-ref>  
          <result name="SUCCESSGSS">
               /views/studentHome.jsp
          </result>

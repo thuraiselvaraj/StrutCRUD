@@ -1,9 +1,13 @@
 package com.models;
 public class UserMetaBean {
-    private int Id=13;
+    private int Id=0;
     private byte Type;
     private String SessionKey="";
-    private String StaffDepartment="VFS";
+    private String StaffDepartment="NULL";
+
+    public UserMetaBean(){
+        System.out.println("Instantiating the UserMeta");
+    }
 
     public void setSessionKey(String SessionKey){
         this.SessionKey=SessionKey;
@@ -13,11 +17,11 @@ public class UserMetaBean {
         return SessionKey;
     }
 
-    public void setStaffDepartment(String StaffDepartment){
+    public void setDepartment(String StaffDepartment){
         this.StaffDepartment=StaffDepartment;
     }
 
-    public String getStaffDepartment(){
+    public String getDepartment(){
         return StaffDepartment;
     }
 
@@ -37,5 +41,7 @@ public class UserMetaBean {
         this.Type=Type;
     }
 
-
+    public String toString(){
+        return Id+" "+Type+" "+SessionKey;
+    }
 }

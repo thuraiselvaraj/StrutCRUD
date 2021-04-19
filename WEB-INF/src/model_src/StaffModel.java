@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSetMetaData;
 import java.sql.PreparedStatement;
+import com.models.UserMetaBean;
 public class StaffModel implements Codes{
     ResultSet rs;
     Connection con;
@@ -155,8 +156,9 @@ public byte updateStudent(StaffAction staff){
 
 public ResultSet listStudents(StaffAction student){
     try{
+      setStaffDepartment(student.getUserMeta());
       PreparedStatement ps=con.prepareStatement("select student_details.*,login_table.email, d.dept from login_table join student_details  using(_id) join dept_student_map s using (student_id) join department d on d._id=s.d_id where d.dept=? order by login_table._id limit 10 offset ?");
-      ps.setString(1,student.getUserMeta().getStaffDepartment());
+      ps.setString(1,student.getUserMeta().getDepartment());
        //set offset to pagination for listing.
        if(student.CurrentPage<=1){
         ps.setInt(2,0);
@@ -302,7 +304,8 @@ public String createUpdateKey(int Id) throws Exception{
 
     public void checkForDeptAndAdd(StaffAction staff,Integer prev_student_id)  throws Exception{
         PreparedStatement ps=con.prepareStatement("select _id from department where dept=?");
-        ps.setString(1,staff.getUserMeta().getStaffDepartment());
+        setStaffDepartment(staff.getUserMeta());
+        ps.setString(1,staff.getUserMeta().getDepartment());
         int dept_id=0;
         boolean dept_exists=false;
         System.out.println("The prev_staff id is "+prev_student_id+" current "+staff.Student_id);
@@ -343,7 +346,7 @@ public String createUpdateKey(int Id) throws Exception{
             // System.out.println("rs_result "+rs_result);
             // rs.close();
             ps=con.prepareStatement("insert into department(dept) values(?);",Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1,staff.getUserMeta().getStaffDepartment());
+            ps.setString(1,staff.getUserMeta().getDepartment());
             ps.executeUpdate();
             rs=ps.getGeneratedKeys();
             if(rs.next()){
@@ -361,6 +364,18 @@ public String createUpdateKey(int Id) throws Exception{
             ps.close();
        
          
+    }
+    public void setStaffDepartment(UserMetaBean ubea) throws Exception{
+        PreparedStatement ps=con.prepareStatement("select d.dept from login_table join staff_details staff  using(_id) join dept_staff_map s using (staff_id) join department d on d._id=s.d_id where login_table._id=?;");
+        ps.setInt(1,ubea.getId());
+        System.out.println(ubea.getId());
+        ResultSet rs=ps.executeQuery();
+        if(rs.next()){
+            ubea.setDepartment(rs.getString("dept"));
+        }
+        else{
+            throw new Exception("No dept found");
+        }
     }
 
    

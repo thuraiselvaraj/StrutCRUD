@@ -5,7 +5,7 @@
    </head>
    <body>
       <h2>Update Staff <s:property value="Staff_Id"/></h2>
-<form action=/StrutCRUD/admin.action?ActionType=UpdateStaff method="post">
+<form action='/StrutCRUD/admin.action?ActionType=UpdateStaff&SessionKey=<s:property value="SessionKey"/>' method="post">
 <br/>Name:         </b><input type="text" name="StaffName" value='<s:property value="staffBean.StaffName"/>'>
 <br/>Email:        </b><input type="email"  name="StaffEmail" value='<s:property value="staffBean.StaffEmail"/>'>  //set this to read only in staff user.
 <br/>Department:  </b><input type="text" name="StaffDepartment" value='<s:property value="staffBean.StaffDepartment"/>'>

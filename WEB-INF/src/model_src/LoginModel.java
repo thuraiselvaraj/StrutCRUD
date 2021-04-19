@@ -31,9 +31,9 @@ public class LoginModel implements Codes{
             ps.close();
             if(laction.getEmail().equals(Email)){
                 if(laction.getPassword().equals(Password)){
-                    laction.UserMeta.setSessionKey(createSession(Id,TYPE));
-                    laction.UserMeta.setType(TYPE);
-                    laction.UserMeta.setId(Id);
+                    laction.getUserMeta().setSessionKey(createSession(Id,TYPE));
+                    laction.getUserMeta().setType(TYPE);
+                    laction.getUserMeta().setId(Id);
                     return SUCCESS;
                 }
                 else{

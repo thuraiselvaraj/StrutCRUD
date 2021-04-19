@@ -29,10 +29,10 @@
 						<td><s:property value="StaffPhone_no" /></td>
 						<td><s:property value="StaffEducational_qualification" /></td>
 						<td>
-							<a href='admin.action?ActionType=GetStaff&StaffEmail=<s:property value="StaffEmail"/>'>
+							<a href='admin.action?ActionType=GetStaff&StaffEmail=<s:property value="StaffEmail"/>&SessionKey=<s:property value="SessionKey"/>'>
 								<button class="button-update">Edit</button>
 							</a>
-							<a href='admin.action?ActionType=DeleteStaff&StaffEmail=<s:property value="StaffEmail"/>'>
+							<a href='admin.action?ActionType=DeleteStaff&StaffEmail=<s:property value="StaffEmail"/>&SessionKey=<s:property value="SessionKey"/>'>
 								<button class="button-delete">Delete</button>
 							</a>
 						</td>

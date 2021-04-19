@@ -8,15 +8,15 @@ public class LoginAction extends ActionSupport{
 
     private String Email="";
     private String Password="";
-    public UserMetaBean UserMeta;
+    public UserMetaBean userMeta;
     private String Message="";
    
     public LoginAction(){
-        UserMeta=new UserMetaBean();  
+        userMeta=new UserMetaBean();  
     }
 
     public UserMetaBean getUserMeta(){
-        return UserMeta;
+        return userMeta;
     } 
 
     public String getMessage(){
@@ -44,7 +44,10 @@ public class LoginAction extends ActionSupport{
         LoginModel lmodel=new LoginModel();
         byte Response=lmodel.checkIfUserExistsAndDoLogin(this);
         Message=Codes.stringify(Response);
-        System.out.println("THe message is"+Message+"  "+Response);
+        System.out.println(userMeta);
+        if(Message.equals("SUCCESS")){
+            return Codes.stringify(userMeta.getType());
+        }
         return Message;
     }
 }

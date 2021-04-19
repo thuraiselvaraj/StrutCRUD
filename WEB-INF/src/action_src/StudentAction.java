@@ -5,19 +5,38 @@ import com.models.UserMetaBean;
 import com.opensymphony.xwork2.ActionSupport;
 import com.models.Codes;
 import java.sql.ResultSet;
-public class StudentAction  extends ActionSupport{
+import com.opensymphony.xwork2.ActionContext;
+import java.util.*;
+
+public class StudentAction  extends ActionSupport implements GetMeta{
     public String Message="ERROR";
     public String ActionType="";
     private UserMetaBean UserMeta;
     public StudentBean studentBean;
+    private String SessionKey="";
 
     public StudentAction(){
         UserMeta=new UserMetaBean(); 
+        System.out.println("Instantiated the Student");
     }
 
     public UserMetaBean getUserMeta(){
         return UserMeta;
     } 
+
+    public void setSessionKey(String SessionKey){
+        this.SessionKey=SessionKey;
+    }
+
+    public String getSessionKey(){
+        return SessionKey;
+    }
+
+    public void setActionType(String ActionType){
+        System.out.println("Calling action type");
+        this.ActionType=ActionType;
+    }
+
 
     public String getStudent(){
         try{
@@ -51,7 +70,14 @@ public class StudentAction  extends ActionSupport{
     }
   
     public String exec(){
+        
+      ActionContext context = ActionContext.getContext();
+      Map<String,Object> parameters = (Map<String,Object>)context.get(ActionContext.PARAMETERS);
+      System.out.println(parameters);
+
         System.out.println("Exec "+ActionType.trim().length());
+        System.out.println(UserMeta);
+
         String temp=null;
         switch(ActionType.trim()){
           case "GetStudent":
@@ -59,9 +85,10 @@ public class StudentAction  extends ActionSupport{
              temp= getStudent();
              return temp+"GSS";
           default :
-             Message="Action Type not found";
+             Message="Student Action Type not found";
              return Message;
     }
   }
+   
 }
           

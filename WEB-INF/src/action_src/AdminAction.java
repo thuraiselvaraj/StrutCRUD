@@ -165,6 +165,10 @@ public class AdminAction extends AdminStaffActionCommon implements Codes{
                   temp=deleteStaff();
                   System.out.println(temp+"DS");
                   return temp+"DS";
+            case "GetHome":
+                  return  "SUCCESSGH";
+            case "StaForm":
+                  return  "SUCCESSSF";
            default :
                  return Message;
         }
