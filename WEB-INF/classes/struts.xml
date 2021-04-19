@@ -65,5 +65,50 @@
                views/dummy.jsp?Message=${Message}
          </result>
          </action>
+
+
+          <action name="staff"  class="com.actions.StaffAction" method="exec">
+         <result name="SUCCESSCSS" >
+                /views/staffHome.jsp
+         </result>
+
+         <result name="SUCCESSUSS" type="redirectAction">
+              /StrutCRUD/staff.action?ActionType=ListStudents
+         </result>
+
+         <result name="SUCCESSGSS" >
+                /views/editStudent.jsp
+         </result>
+
+         <result name="SUCCESSLSS" >
+                /views/listAllStudents.jsp
+         </result>
+
+          <result name="SUCCESSDSS" type="redirectAction">
+              /StrutCRUD/staff.action?ActionType=ListStudents
+         </result>
+
+         <result name="SUCCESSGS" >
+              /views/editStaffSelf.jsp
+         </result>
+
+         <result name="SUCCESSUS" >
+                /views/staffHome.jsp
+         </result>
+
+         <result name="SUCCESSDS" >
+              /views/showStaff.jsp
+         </result>
+
+         <result name="*" type="redirect">
+               views/dummy.jsp?Message=${Message}
+         </result>
+         </action>
+
+
+        
+
+
+
     </package>
 </struts>

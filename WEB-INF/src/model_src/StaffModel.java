@@ -157,10 +157,10 @@ public ResultSet listStudents(StaffAction student){
       ps.setString(1,student.getUserMeta().getStaffDepartment());
        //set offset to pagination for listing.
        if(student.CurrentPage<=1){
-        ps.setInt(1,0);
+        ps.setInt(2,0);
         }
         else{
-            ps.setInt(1,(student.CurrentPage-1)*10);
+            ps.setInt(2,(student.CurrentPage-1)*10);
         }
       return ps.executeQuery();
     }

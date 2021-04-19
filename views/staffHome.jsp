@@ -5,13 +5,13 @@
 <html>
     <head>
       <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-      <title>Home Page</title>
+      <title> Staff Home Page</title>
     </head>
     <body>
       <p>Staff Home</p>
-      <a href="">Edit students of <s:property value="UserMeta.SessionKey"/></a>
-      <a href="">Edit your details</a>
-      <a href="">List all students</a>
+      <a href="/StrutCRUD/staff.action?ActionType=GetStaff">Edit your details</a>
+      <a href="/StrutCRUD/staff.action?ActionType=ListStudents">List all students</a>
+      <a href="/StrutCRUD/staff.action?ActionType=DisplayStaff">Get Self Details</a>
     </body>
 </html>
    

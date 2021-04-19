@@ -20,6 +20,7 @@ public class AdminStaffActionCommon extends ActionSupport {
 
     public AdminStaffActionCommon(){
         UserMeta=new UserMetaBean(); 
+        staffBean=new StaffBean();
     }
     
     public UserMetaBean getUserMeta(){

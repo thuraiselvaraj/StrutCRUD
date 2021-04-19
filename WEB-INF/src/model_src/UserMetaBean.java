@@ -1,9 +1,9 @@
 package com.models;
 public class UserMetaBean {
-    private int Id;
+    private int Id=6;
     private byte Type;
     private String SessionKey="";
-    private String StaffDepartment="";
+    private String StaffDepartment="VFS";
 
     public void setSessionKey(String SessionKey){
         this.SessionKey=SessionKey;

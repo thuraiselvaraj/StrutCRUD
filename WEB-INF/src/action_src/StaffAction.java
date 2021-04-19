@@ -74,28 +74,18 @@ public class StaffAction extends AdminStaffActionCommon{
         }
     }
     public String updateStaff(){
-        if(this.StudentEmail.contains("@")==false){
-             Message="EMAIL_TAMPERED";
-             return Message;
-        }
-        else if(this.Student_id==null){
-            Message="EMPTY_STAFF_ID";
-            return Message;
-        }
-        else{
             StaffModel staff=new StaffModel();
             byte Result=staff.updateStaff(this);
             Message=Codes.stringify(Result);
             return Message;
-        }
     }
 
 public String getStaff(){
         try{
-           System.out.println("GETSTAFF");
+            System.out.println("GETSTAFF");
             StaffModel staff=new StaffModel();
             ResultSet rs=staff.getStaff(this);
-            if(rs==null){return "ERROR";}
+            if(rs==null){return "NULL";}
             if(rs.next()){
                staffBean.StaffName=rs.getString("name");
                staffBean.StaffDob=rs.getString("dob");
@@ -154,7 +144,7 @@ public String listStudents(){
 
 public String getStudent(){
     try{
-       System.out.println("GETSTAFF");
+       System.out.println("GETSTUDENT");
        if(this.StudentEmail.contains("@")==false){
            Message="EMAIL_TAMPERED";
            return Message;
@@ -207,6 +197,7 @@ public String deleteStudent(){
                 System.out.println(ActionType.trim());
                  temp= createStudent();
                  return temp+"CSS";
+
             case "GetStudent":
                 System.out.println(ActionType.trim());
                  temp= getStudent();
@@ -215,7 +206,7 @@ public String deleteStudent(){
             case "UpdateStaff":
                 System.out.println(ActionType.trim());
                  temp= updateStaff();
-                 return temp+"USS";
+                 return temp+"US";
 
             case "DeleteStudent":
                 System.out.println(ActionType.trim());
@@ -230,14 +221,20 @@ public String deleteStudent(){
             case "UpdateStudent":
                  System.out.println(ActionType.trim());
                   temp=updateStudent();
-                  return temp+"DS";
+                  return temp+"DSS";
 
-            case "GetStaff":
+            case "GetStaff" :
                  System.out.println(ActionType.trim());
                   temp= getStaff();
                   return temp+"GS";
+
+            case "DisplayStaff" :
+                System.out.println(ActionType.trim());
+                temp= getStaff();
+                return temp+"DS";
             
            default :
+                 Message="Action Type not found";
                  return Message;
         }
     }
