@@ -1,18 +1,17 @@
 <%@taglib prefix="s" uri="/struts-tags"%>
 <html>
    <head>
-      <title>StudentDetails</title>
+      <title>Show Student</title>
    </head>
    <body>
-
-<h2>Student <s:property value="Student_Id"/> Details</h2>
-<b>Name:        <s:property value=""/>
-<b>Email:         <s:property value="uemail"/>
-<b>Department:  <s:property value="udeg"/>
-<b>DOB :        <s:property value="udeg"/>
-<b>Phone_no:     <s:property value="udeg"/>
-<b>Educational_qualification:<s:property value="udeg"/>
-<b>Student_Id:<s:property value="udeg"/>
-
+      <h2>Show Student <s:property value="studentBean.Student_id"/></h2>
+<br/>Name:         </b><s:property value="studentBean.StudentName"/>
+<br/>Email:        </b><s:property value="studentBean.StudentEmail"/>  //set this to read only in staff user.
+<br/>Department:  </b><s:property value="studentBean.StudentDepartment"/>
+<br/>DOB :         </b><s:property value="studentBean.StudentDob"/>
+<br/>Phone_no:     </b><s:property value="studentBean.StudentPhone_no"/>
+<br/>Address:</b><s:property value="studentBean.StudentAddress"/>
+<br/>Student_Id</b><s:property value="studentBean.Student_id"/>
+</form>
    </body>
 </html>

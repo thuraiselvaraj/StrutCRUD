@@ -2,49 +2,66 @@ package com.actions;
 import com.models.StudentModel;
 import com.models.StudentBean;
 import com.models.UserMetaBean;
-import com.models.CommonModel;
+import com.opensymphony.xwork2.ActionSupport;
 import com.models.Codes;
 import java.sql.ResultSet;
-public class StudentAction extends SessionInterceptor implements Codes {
-    private StudentBean student=new StudentBean();
-    public UserMetaBean userMeta;
-    public String showStudentDetails(){
-            Student student_model=new StudentModel();
-            ResultSet rs=student_model.getStudent();
+public class StudentAction  extends ActionSupport{
+    public String Message="ERROR";
+    public String ActionType="";
+    private UserMetaBean UserMeta;
+    public StudentBean studentBean;
+
+    public StudentAction(){
+        UserMeta=new UserMetaBean(); 
+    }
+
+    public UserMetaBean getUserMeta(){
+        return UserMeta;
+    } 
+
+    public String getStudent(){
+        try{
+           System.out.println("GETSTUDENT");
+            StudentModel student=new StudentModel();
+            ResultSet rs=student.getStudent(this);
+            if(rs==null){
+                Message="null";
+                return Message;}
             if(rs.next()){
-                student.StudentName=rs.getString("name");
-                student.StudentDob=rs.getString("dob");
-                student.StudentPhone_no=rs.getString("phone_no");
-                student.StudentDepartment=rs.getString("department");
-                student.StudentAddress=rs.getString("address");
-                student.Student_id=rs.getInt("student_id");
-                student.StudentEmail=rs.getString("email");
-                return Codes.stringify(SUCCESS);
-            } 
-            return Codes.stringify(NO_STUDENTS);
-         }
+                studentBean=new StudentBean();
+                studentBean.StudentName=rs.getString("name");
+                studentBean.StudentDob=rs.getString("dob");
+                studentBean.StudentPhone_no=rs.getString("phone_no");
+                studentBean.StudentDepartment=rs.getString("dept");
+                studentBean.Student_id=rs.getInt("student_id");
+                studentBean.StudentEmail=rs.getString("email");
+                studentBean.StudentAddress=rs.getString("address");
+                Message="SUCCESS";
+               return Message;
+               }
+            else{
+                  Message="EMAIL_TAMPERED";
+                  return Message;
+               }
+            }
+           catch(Exception e){
+               e.printStackTrace();
+               return "ERROR";
+            }
+    }
+  
+    public String exec(){
+        System.out.println("Exec "+ActionType.trim().length());
+        String temp=null;
+        switch(ActionType.trim()){
+          case "GetStudent":
+             System.out.println(ActionType.trim());
+             temp= getStudent();
+             return temp+"GSS";
+          default :
+             Message="Action Type not found";
+             return Message;
+    }
+  }
 }
-
-/*  Bean props
-    public String StudentName;
-    public String StudentDob;
-    public String StudentPhone_no;
-    public String StudentDepartment;
-    public String StudentEducational_qualification;
-    public Integer Student_id;
-    public String StudentEmail;
-    */
-/*
-create table if not exists student_details(_id int,
-                                         name varchar(30) not null,
-                                         student_id int unique,
-                                         dob varchar(15),
-                                         phone_no varchar(15),
-                                         department varchar(20),
-                                         address varchar(100),
-                                         foreign key(_id) references login_table(_id) on delete cascade,
-                                         primary key(_id)
-                                        );
-*/
-
-
+          

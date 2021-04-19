@@ -120,6 +120,7 @@ public byte updateStudent(StaffAction staff){
             ps.setInt(1,staff.Student_Uid);
             ResultSet rs=ps.executeQuery();
             Integer prev_student_id=null;
+            System.out.println(ps);
             if(rs.next()){
                prev_student_id=rs.getInt("student_id");
             }
@@ -131,11 +132,12 @@ public byte updateStudent(StaffAction staff){
             ps.setString(5,staff.StudentAddress);
             ps.setInt(6,staff.Student_Uid);
             ps.executeUpdate();
+            System.out.println(ps);
             ps.close();
             ps=con.prepareStatement("update login_table set email=? where _id=?;");
             ps.setString(1,staff.StudentEmail);
             ps.setInt(2,staff.Student_Uid);
-        
+            System.out.println(ps);
             ps.executeUpdate();
             checkForDeptAndAdd(staff,prev_student_id);
             con.commit();
@@ -219,10 +221,17 @@ public ResultSet getStaff(StaffAction staff){
     }
 public ResultSet getStudent(StaffAction staff){
         try{
+        if(CheckIfEmailAndStaffAreOfSameDept(staff)){
+            System.out.println("STaff and stu are same department");
             PreparedStatement ps=con.prepareStatement("select student_details.*,login_table.email, d.dept from login_table join student_details  using(_id) join dept_student_map s using (student_id) join department d on d._id=s.d_id where login_table.email=?");
             ps.setString(1,staff.StudentEmail);
             return ps.executeQuery();
-        }
+           }
+        else{
+            System.out.println("STaff and stu are diff department");
+            return null;
+          }
+         }
         catch(Exception e){
             e.printStackTrace();
             return null;
@@ -230,11 +239,10 @@ public ResultSet getStudent(StaffAction staff){
         }
 
 public byte deleteStudent(StaffAction staff){
-            int id=0;
             try{
             if(CheckIfEmailAndStaffAreOfSameDept(staff)){
-                PreparedStatement ps=con.prepareStatement("delete from login_table where _id=?");
-                ps.setInt(1,id);
+                PreparedStatement ps=con.prepareStatement("delete from login_table where email=?");
+                ps.setString(1,staff.StudentEmail);
                 if(ps.executeUpdate()>0){
                     ps.close();
                     return SUCCESS;
@@ -242,6 +250,7 @@ public byte deleteStudent(StaffAction staff){
                 return NO_SUCCESS;
             }
             else{
+                System.out.println("STaff and stu are diff department");
                 return EMAIL_TAMPERED;
             }
           }
@@ -293,10 +302,11 @@ public String createUpdateKey(int Id) throws Exception{
 
     public void checkForDeptAndAdd(StaffAction staff,Integer prev_student_id)  throws Exception{
         PreparedStatement ps=con.prepareStatement("select _id from department where dept=?");
-        ps.setString(1,staff.StudentDepartment);
+        ps.setString(1,staff.getUserMeta().getStaffDepartment());
         int dept_id=0;
         boolean dept_exists=false;
         System.out.println("The prev_staff id is "+prev_student_id+" current "+staff.Student_id);
+        System.out.println(ps);
         if((rs=ps.executeQuery()).next()){
             dept_id=rs.getInt("_id");
             dept_exists=true;
@@ -333,7 +343,7 @@ public String createUpdateKey(int Id) throws Exception{
             // System.out.println("rs_result "+rs_result);
             // rs.close();
             ps=con.prepareStatement("insert into department(dept) values(?);",Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1,staff.StudentDepartment);
+            ps.setString(1,staff.getUserMeta().getStaffDepartment());
             ps.executeUpdate();
             rs=ps.getGeneratedKeys();
             if(rs.next()){

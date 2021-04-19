@@ -8,7 +8,6 @@ public class StaffAction extends AdminStaffActionCommon{
     public String StudentName;
     public String StudentDob;
     public String StudentPhone_no;
-    public String StudentDepartment;
     public String StudentAddress;
     public Integer Student_id;
     public List<StudentBean> studentBeanList;
@@ -30,10 +29,6 @@ public class StaffAction extends AdminStaffActionCommon{
 
     public void setStudentPhone_no(String StudentPhone_no){
         this.StudentPhone_no=StudentPhone_no;
-    }
-
-    public void setStaffDepartment(String StaffDepartment){
-        this.StaffDepartment=StaffDepartment;
     }
 
     public void setStudentEmail(String StudentEmail){

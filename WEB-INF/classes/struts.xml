@@ -105,6 +105,17 @@
          </result>
          </action>
 
+         <action name="student"  class="com.actions.StudentAction" method="exec">
+         <result name="SUCCESSGSS">
+              /views/studentHome.jsp
+         </result>
+
+         <result name="*" type="redirect">
+               views/dummy.jsp?Message=${Message}
+         </result>
+
+         </action>
+
 
         
 
