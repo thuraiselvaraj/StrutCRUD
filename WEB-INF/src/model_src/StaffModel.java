@@ -1,23 +1,25 @@
 package com.models;
+import com.actions.StaffAction;
+import com.security.Security;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSetMetaData;
 import java.sql.PreparedStatement;
-
 public class StaffModel implements Codes{
     ResultSet rs;
-public StaffModel(){
-    con=DBConnection.getConnection();
-}
+    Connection con;
+    public StaffModel(){
+        con=DBConnection.getConnection();
+    }
 public byte createStudent(StaffAction student){
   try{
-      if(checkSidExists(student.Student_id)){
+      if(checkStudentIdExists(student.Student_id)){
           return STUDENT_ID_EXISTS;
       
       }
-      else if(checkEmailExists(student.StudentEmail)){
+      else if(checkStudentEmailExists(student.StudentEmail)){
           return EMAIL_EXISTS;
       }
       else{
@@ -28,12 +30,12 @@ public byte createStudent(StaffAction student){
           PreparedStatement ps=con.prepareStatement("insert into login_table(email,password,type) values(?,?,?);",Statement.RETURN_GENERATED_KEYS);
           ps.setString(1,student.StudentEmail);
           ps.setString(2, HashedRandomPassword);
-          ps.setString(3, STUDENT);
+          ps.setByte(3,STUDENT);
           ps.executeUpdate();
           ResultSet rs = ps.getGeneratedKeys();
-          int Id;
+          int Id=0;
           if(rs.next()){
-              Id= rs.getInt(i);
+              Id= rs.getInt("GENERATED_KEY");
           }
           ps.close();
           rs.close();
@@ -47,107 +49,22 @@ public byte createStudent(StaffAction student){
            ps.setString(6,student.StudentAddress);
            ps.executeUpdate();
            ps.close();
-           checkForDeptAndAdd(student);
+           checkForDeptAndAdd(student,student.Student_id);
            }
       con.commit();
       return SUCCESS;
-  }
+      }
   catch(Exception e){
-      con.rollback();
-      e.printStackTrace();
-      return ERROR;
-  }
+    e.printStackTrace();
+    try {con.rollback();}
+    catch(Exception ex){ex.printStackTrace();}
+    finally{ return ERROR;}
+}
+ 
    
 }
-public void checkForDeptAndAddStudent(StaffAction student){
-  ps=con.prepareStatement("select _id from department where dept=?");
-          ps.setString(1,student.StudentDepartment);
-          int dept_id;
-          if((rs=ps.execute()).next()){
-              dept_id=rs.getInt("_id");
-              ps.close();
-              ps=con.prepareStatement("insert into dept_student_map(d_id,student_id) values(?,?);");
-              // ps.setString(1,student.StudentDepartment);
-              ps.setInt(1,dept_id);
-              ps.setInt(2,student.Student_id);
-              ps.executeUpdate();
-              rs.close();
-              ps.close();
-          }
-          else{
-              ps=con.prepareStatement("insert into department(dept) values(?);",Statement.RETURN_GENERATED_KEYS);
-              ps.setString(1,student.StudentDepartment);
-              ps.executeUpdate();
-              dept_id=ps.getGeneratedKeys().getInt("_id");
-              ps.close();
-              ps=con.prepareStatement("insert into dept_student_map(d_id,student_id) values(?,?);");
-              ps.setInt(1,dept_id);
-              ps.setInt(2,student.Student_id);
-              ps.executeUpdate();
-              ps.close();
-          }
-}
 
-public void checkForDeptAndAddStudent(StaffAction student)  throws Exception{
-    ps=con.prepareStatement("select _id from department where dept=?");
-            ps.setString(1,student.StudentDepartment);
-            int dept_id;
-            if((rs=ps.execute()).next()){
-                dept_id=rs.getInt("_id");
-                ps.close();
-                ps=con.prepareStatement("insert into dept_student_map(d_id,student_id) values(?,?);");
-                // ps.setString(1,student.StudentDepartment);
-                ps.setInt(1,dept_id);
-                ps.setInt(2,student.Student_id);
-                ps.executeUpdate();
-                rs.close();
-                ps.close();
-            }
-            else{
-                ps=con.prepareStatement("insert into department(dept) values(?);",Statement.RETURN_GENERATED_KEYS);
-                ps.setString(1,student.StudentDepartment);
-                ps.executeUpdate();
-                dept_id=ps.getGeneratedKeys().getInt("_id");
-                ps.close();
-                ps=con.prepareStatement("insert into dept_student_map(d_id,student_id) values(?,?);");
-                ps.setInt(1,dept_id);
-                ps.setInt(2,student.Student_id);
-                ps.executeUpdate();
-                ps.close();
-            }
-  }
-
-  public void checkForDeptAndAddStaff(AdminAction staff) throws Exception{
-    ps=con.prepareStatement("select _id from department where dept=?");
-            ps.setString(1,staff.StaffDepartment);
-            int dept_id;
-            if((rs=ps.execute()).next()){
-                dept_id=rs.getInt("_id");
-                ps.close();
-                ps=con.prepareStatement("insert into dept_staff_map(d_id,staff_id) values(?,?);");
-                // ps.setString(1,staff.StaffDepartment);
-                ps.setInt(1,dept_id);
-                ps.setInt(2,staff.Staff_id);
-                ps.executeUpdate();
-                rs.close();
-                ps.close();
-            }
-            else{
-                ps=con.prepareStatement("insert into department(dept) values(?);",Statement.RETURN_GENERATED_KEYS);
-                ps.setString(1,staff.StaffDepartment);
-                ps.executeUpdate();
-                dept_id=ps.getGeneratedKeys().getInt("_id");
-                ps.close();
-                ps=con.prepareStatement("insert into dept_staff_map(d_id,staff_id) values(?,?);");
-                ps.setInt(1,dept_id);
-                ps.setInt(2,staff.Staff_id);
-                ps.executeUpdate();
-                ps.close();
-            }
-}
-
-
-public boolean checkStudentIdExists(int Student_id){
+public boolean checkStudentIdExists(int Student_id) throws Exception{
   PreparedStatement ps=con.prepareStatement("select _id from student_details where student_id=?");
   ps.setInt(1,Student_id);
   ResultSet rs=ps.executeQuery();
@@ -155,104 +72,118 @@ public boolean checkStudentIdExists(int Student_id){
   
 }
 
-public boolean checkStudentEmailExists(String StudentEmail){
+public boolean checkStudentEmailExists(String StudentEmail) throws Exception{
   PreparedStatement ps=con.prepareStatement("select _id from login_table where email=?");
   ps.setString(1,StudentEmail);
   ResultSet rs=ps.executeQuery();
   return rs.next() ;
 }
 
-public boolean checkStaffIdExists(int Staff_id){
-    PreparedStatement ps=con.prepareStatement("select _id from staff_details where staff_id=?");
-    ps.setInt(1,Staff_id);
-    ResultSet rs=ps.executeQuery();
-    return rs.next();
-    
-}
-
-public boolean checkStaffEmailExists(String StaffEmail){
-    PreparedStatement ps=con.prepareStatement("select _id from login_table where email=?");
-    ps.setString(1,StaffEmail);
-    ResultSet rs=ps.executeQuery();
-    return rs.next() ;
-}
-
-
-
 @Override
 public void finalize() throws Throwable{
   con.close();
 }
 
-public byte updateStudent(StaffAction student){
-  try{
-      if(checkStudentIdExists(student.Student_id)){
-          return STUDENT_ID_EXISTS;
-      
-      }
-      else if(checkStudentEmailExists(student.StudentEmail)){
-          return EMAIL_EXISTS;
-      }
-      else{
-          con.setAutoCommit(false);
-          PreparedStatement ps=con.prepareStatement("update employee details set name=?,student_id=?,dob=?,phone_no=?,educational_qualification=? where _id=?");
-           ps.setString(1,student.StudentName);
-           ps.setInt(2,student.Student_id);
-           ps.setString(3,student.StudentDob);
-           ps.setString(4,student.StudentPhone_no);
-           ps.setString(5,student.StudentEducational_qualification);
-           ps.setInt(6,Id);
-           ps.executeUpdate();
-           checkForDeptAndAdd(student);
-           ps=con.prepareStatement("update login_table set email=? where _id=?;");
-           ps.setString(1,staff.StaffEmail);
-           ps.setInt(2,staff.Id);
-           ps.executeUpdate();
-           con.commit();
-           return SUCCESS;
-      }
-  }
-  catch(Exception e){
-      e.printStackTrace();
-      con.rollback();
-      return ERROR;
-  }
-
+public boolean checkStudentIdExistsForUpdate(int Student_id,int Id) throws Exception{
+    PreparedStatement ps=con.prepareStatement("select _id from student_details where student_id=? and _id != ?");
+    ps.setInt(1,Student_id);
+    ps.setInt(2,Id);
+    ResultSet rs=ps.executeQuery();
+    System.out.println(ps);
+    return rs.next();
+    
 }
+
+public boolean checkStudentEmailExistsForUpdate(String StudentEmail,int Id) throws Exception{
+    PreparedStatement ps=con.prepareStatement("select _id from login_table where email = ? and _id != ?");
+    ps.setString(1,StudentEmail);
+    ps.setInt(2,Id);
+    ResultSet rs=ps.executeQuery();
+    System.out.println("cheeck email on update"); 
+    System.out.println(ps);
+    return rs.next() ;
+}
+
+public byte updateStudent(StaffAction staff){
+    try{
+        getIdByUpdateKey(staff);
+        if(checkStudentIdExistsForUpdate(staff.Student_id,staff.Student_Uid)){
+            return STUDENT_ID_EXISTS;
+        
+        }
+        else if(checkStudentEmailExistsForUpdate(staff.StudentEmail,staff.Student_Uid)){
+            return EMAIL_EXISTS;
+        }
+        else{
+            con.setAutoCommit(false);
+            PreparedStatement ps=con.prepareStatement("select student_id from student_details where _id=?");
+            ps.setInt(1,staff.Student_Uid);
+            ResultSet rs=ps.executeQuery();
+            Integer prev_student_id=null;
+            if(rs.next()){
+               prev_student_id=rs.getInt("student_id");
+            }
+            ps=con.prepareStatement("update student_details set name=?,student_id=?,dob=?,phone_no=?,address=? where _id=?");
+            ps.setString(1,staff.StudentName);
+            ps.setInt(2,staff.Student_id);
+            ps.setString(3,staff.StudentDob);
+            ps.setString(4,staff.StudentPhone_no);
+            ps.setString(5,staff.StudentAddress);
+            ps.setInt(6,staff.Student_Uid);
+            ps.executeUpdate();
+            ps.close();
+            ps=con.prepareStatement("update login_table set email=? where _id=?;");
+            ps.setString(1,staff.StudentEmail);
+            ps.setInt(2,staff.Student_Uid);
+        
+            ps.executeUpdate();
+            checkForDeptAndAdd(staff,prev_student_id);
+            con.commit();
+            return SUCCESS;
+        }
+    }
+    catch(Exception e){
+        e.printStackTrace();
+        try {con.rollback();}
+        catch(Exception ex){ex.printStackTrace();}
+        finally{ return ERROR;}
+    }
+       }
+
 
 public ResultSet listStudents(StaffAction student){
     try{
       PreparedStatement ps=con.prepareStatement("select student_details.*,login_table.email, d.dept from login_table join student_details  using(_id) join dept_student_map s using (student_id) join department d on d._id=s.d_id where d.dept=? order by login_table._id limit 10 offset ?");
-      ps.setString(1,student.StaffDepartment);
-      ps.setInt(2,student.CurrentPage*10-1); //set offset to pagination for listing.
+      ps.setString(1,student.getUserMeta().getStaffDepartment());
+       //set offset to pagination for listing.
+       if(student.CurrentPage<=1){
+        ps.setInt(1,0);
+        }
+        else{
+            ps.setInt(1,(student.CurrentPage-1)*10);
+        }
       return ps.executeQuery();
     }
     catch(Exception e){
         e.printStackTrace();
-        return new ResultSet(){
-        };
+        return null;
     }
 }
 
 
 public byte updateStaff(StaffAction staff){
-    try{
-            con.setAutoCommit(false);
+    try{                
             PreparedStatement ps=con.prepareStatement("update staff_details set name=?,dob=?,phone_no=?,educational_qualification=? where _id=?");
              ps.setString(1,staff.StaffName);
              ps.setString(2,staff.StaffDob);
              ps.setString(3,staff.StaffPhone_no);
              ps.setString(4,staff.StaffEducational_qualification);
-             ps.setInt(5,staff.Id);
+             ps.setInt(5,staff.getUserMeta().getId());
              ps.executeUpdate();
-             checkForDeptAndAdd(staff);
-             ps.executeUpdate();
-             con.commit();
              return SUCCESS;    
     }
     catch(Exception e){
         e.printStackTrace();
-        con.rollback();
         return ERROR;
     }
 }
@@ -278,7 +209,7 @@ public void printTable(String tableName) throws Exception{
 public ResultSet getStaff(StaffAction staff){
     try{
         PreparedStatement ps=con.prepareStatement("select staff_details.*,login_table.email, d.dept from login_table join staff_details  using(_id) join dept_staff_map s using (staff_id) join department d on d._id=s.d_id where login_table._id=?");
-        ps.setInt(1,staff.getUserMetaBean().getId());
+        ps.setInt(1,staff.getUserMeta().getId());
         return ps.executeQuery();
     }
     catch(Exception e){
@@ -298,6 +229,130 @@ public ResultSet getStudent(StaffAction staff){
         }
         }
 
+public byte deleteStudent(StaffAction staff){
+            int id=0;
+            try{
+            if(CheckIfEmailAndStaffAreOfSameDept(staff)){
+                PreparedStatement ps=con.prepareStatement("delete from login_table where _id=?");
+                ps.setInt(1,id);
+                if(ps.executeUpdate()>0){
+                    ps.close();
+                    return SUCCESS;
+                }
+                return NO_SUCCESS;
+            }
+            else{
+                return EMAIL_TAMPERED;
+            }
+          }
+            catch(Exception e){
+                e.printStackTrace();
+                return ERROR;
+            }
+        
+        }
+        
+public boolean CheckIfEmailAndStaffAreOfSameDept(StaffAction staff) throws Exception{
+            PreparedStatement ps =con.prepareStatement("select 1 from dept_staff_map sta join dept_student_map stu on sta.staff_id=(select staff_id from staff_details where _id=?) and sta.d_id=stu.d_id join student_details using(student_id) join login_table using (_id) where login_table.email=?;");
+            ps.setInt(1,staff.UserMeta.getId());   
+            ps.setString(2,staff.StudentEmail);
+            rs=ps.executeQuery();
+            return rs.next();
+        }
 
 
+public String createUpdateKey(int Id) throws Exception{
+        PreparedStatement ps=con.prepareStatement("insert into update_key_map(_id,update_key) values(?,?);");
+        ps.setInt(1, Id);
+        String RandomPassword=Security.get_random_string();
+        String HashedRandomPassword=Security.get_md5(RandomPassword);
+        ps.setString(2, HashedRandomPassword);
+        ps.executeUpdate();
+        ps.close();
+        return HashedRandomPassword;
+    }
+
+    public void getIdByUpdateKey(StaffAction Staff) throws Exception{
+        PreparedStatement ps=con.prepareStatement("select _id from update_key_map where update_key=? ;");
+        ps.setString(1,Staff.getUpdateKey());
+        ResultSet rs=ps.executeQuery();
+        if(rs.next()){
+            Staff.Student_Uid=rs.getInt("_id");
+            rs.close();
+            ps.close();
+            ps=con.prepareStatement("delete from  update_key_map where update_key=?;");
+            ps.setString(1,Staff.getUpdateKey());
+            ps.executeUpdate();
+            ps.close();
+        }
+        else{
+            throw new Exception();
+        }
+
+    }
+
+    public void checkForDeptAndAdd(StaffAction staff,Integer prev_student_id)  throws Exception{
+        PreparedStatement ps=con.prepareStatement("select _id from department where dept=?");
+        ps.setString(1,staff.StudentDepartment);
+        int dept_id=0;
+        boolean dept_exists=false;
+        System.out.println("The prev_staff id is "+prev_student_id+" current "+staff.Student_id);
+        if((rs=ps.executeQuery()).next()){
+            dept_id=rs.getInt("_id");
+            dept_exists=true;
+            rs.close();
+            ps.close();
+        }
+        if(prev_student_id != null){
+            printTable("dept_student_map");
+            ps=con.prepareStatement("delete from dept_student_map where student_id=?");
+            ps.setInt(1,prev_student_id);
+            System.out.println("Deleting dept=" +ps);
+            ps.executeUpdate();
+            ps.close();
+    
+    
+            //The table value cascades because we use fk constaint so the value alters
+            //and duplicates so delete the current staff id in the map
+            //and create a new entry
+            ps=con.prepareStatement("delete from dept_student_map where student_id=?");
+            ps.setInt(1,staff.Student_id);
+            System.out.println("Deleting dept" +ps);
+            ps.executeUpdate();
+            ps.close();
+        }
+    
+        if(dept_exists==false){
+            // ps=con.prepareStatement("select * from dept_student_map where d_id=? and student_id=?");
+            // ps.setInt(1,dept_id);
+            // ps.setInt(2,prev_student_id);
+            // printTable("dept_student_map");
+            // System.out.println(ps);
+            // rs=ps.executeQuery();
+            // boolean rs_result=rs.next();
+            // System.out.println("rs_result "+rs_result);
+            // rs.close();
+            ps=con.prepareStatement("insert into department(dept) values(?);",Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1,staff.StudentDepartment);
+            ps.executeUpdate();
+            rs=ps.getGeneratedKeys();
+            if(rs.next()){
+            dept_id=rs.getInt("GENERATED_KEY");
+            ps.close();
+             }
+           }
+    
+            ps=con.prepareStatement("insert into dept_student_map(d_id,student_id) values(?,?);");
+            ps.setInt(1,dept_id);
+            ps.setInt(2,staff.Student_id);
+            System.out.println(ps);
+            int status=ps.executeUpdate();
+            System.out.println(status);        
+            ps.close();
+       
+         
+    }
+
+   
 }
+

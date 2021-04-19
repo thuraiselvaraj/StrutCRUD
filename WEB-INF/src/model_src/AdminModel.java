@@ -76,6 +76,10 @@ public class AdminModel implements Codes{
         }
          
     }
+
+          
+    
+    
     public void checkForDeptAndAdd(AdminAction staff,Integer prev_staff_id)  throws Exception{
         PreparedStatement ps=con.prepareStatement("select _id from department where dept=?");
         ps.setString(1,staff.StaffDepartment);
@@ -256,7 +260,7 @@ public class AdminModel implements Codes{
     public ResultSet listStaffs(AdminAction staff){
           try{
             PreparedStatement ps=con.prepareStatement("select staff_details.*,login_table.email, d.dept from login_table join staff_details  using(_id) join dept_staff_map s using (staff_id) join department d on d._id=s.d_id order by login_table._id limit 10 offset ?");
-            if(staff.CurrentPage==1){
+            if(staff.CurrentPage<=1){
             ps.setInt(1,0);
             }
             else{

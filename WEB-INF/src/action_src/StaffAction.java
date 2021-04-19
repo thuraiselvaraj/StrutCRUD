@@ -1,6 +1,7 @@
 package com.actions;
 import com.models.StudentBean;
 import com.models.Codes;
+import com.models.StaffModel;
 import java.sql.ResultSet;
 import java.util.*;
 public class StaffAction extends AdminStaffActionCommon{
@@ -10,12 +11,12 @@ public class StaffAction extends AdminStaffActionCommon{
     public String StudentDepartment;
     public String StudentAddress;
     public Integer Student_id;
-    public List<StudentList> studentBeanList;
-    public StaffBean staffBean;  
+    public List<StudentBean> studentBeanList;
     public StudentBean studentBean;
+    public int Student_Uid;
+    public String StudentEmail;
 
-
-    public void setStudent_Id(String Student_id){
+    public void setStudent_Id(int Student_id){
           this.Student_id=Student_id;
     }
 
@@ -31,12 +32,8 @@ public class StaffAction extends AdminStaffActionCommon{
         this.StudentPhone_no=StudentPhone_no;
     }
 
-    public void setStafDepartment(String StafDepartment){
-        this.StafDepartment=StafDepartment;
-    }
-
-    public void setStudentEducational_qualification(String StudentEducational_qualification){
-        this.StudentEducational_qualification=StudentEducational_qualification;
+    public void setStaffDepartment(String StaffDepartment){
+        this.StaffDepartment=StaffDepartment;
     }
 
     public void setStudentEmail(String StudentEmail){
@@ -44,11 +41,11 @@ public class StaffAction extends AdminStaffActionCommon{
     }
 
     public String createStudent(){
-        if(this.StaffEmail.contains("@")==false){
+        if(this.StudentEmail.contains("@")==false){
              Message="EMAIL_TAMPERED";
              return Message;
         }
-        else if(this.Staff_Id==null){
+        else if(this.Student_id==null){
             Message="EMPTY_STUDENT_ID";
             return Message;
         }
@@ -61,11 +58,11 @@ public class StaffAction extends AdminStaffActionCommon{
         }
     }
     public String updateStudent(){
-        if(this.StaffEmail.contains("@")==false){
+        if(this.StudentEmail.contains("@")==false){
              Message="EMAIL_TAMPERED";
              return Message;
         }
-        else if(this.Staff_Id==null){
+        else if(this.Student_id==null){
             Message="EMPTY_STUDENT_ID";
             return Message;
         }
@@ -77,11 +74,11 @@ public class StaffAction extends AdminStaffActionCommon{
         }
     }
     public String updateStaff(){
-        if(this.StaffEmail.contains("@")==false){
+        if(this.StudentEmail.contains("@")==false){
              Message="EMAIL_TAMPERED";
              return Message;
         }
-        else if(this.Staff_Id==null){
+        else if(this.Student_id==null){
             Message="EMPTY_STAFF_ID";
             return Message;
         }
@@ -96,11 +93,6 @@ public class StaffAction extends AdminStaffActionCommon{
 public String getStaff(){
         try{
            System.out.println("GETSTAFF");
-           if(this.StaffEmail.contains("@")==false){
-               Message="EMAIL_TAMPERED";
-               return Message;
-          }
-          else{
             StaffModel staff=new StaffModel();
             ResultSet rs=staff.getStaff(this);
             if(rs==null){return "ERROR";}
@@ -112,14 +104,12 @@ public String getStaff(){
                staffBean.StaffEducational_qualification=rs.getString("educational_qualification");
                staffBean.Staff_Id=rs.getInt("staff_id");
                staffBean.StaffEmail=rs.getString("email");
-            //    setUpdateKey(staff.createUpdateKey(rs.getInt("_id")));
                Message="SUCCESS";
                return Message;
                } 
               else{
                   return "EMAIL_TAMPERED";
                }
-            }
            }
            catch(Exception e){
                e.printStackTrace();
@@ -142,14 +132,14 @@ public String listStudents(){
                 studentBean.StudentDob=rs.getString("dob");
                 studentBean.StudentPhone_no=rs.getString("phone_no");
                 studentBean.StudentDepartment=rs.getString("dept");
-                studentBean.Student_Id=rs.getInt("student_id");
+                studentBean.Student_id=rs.getInt("student_id");
                 studentBean.StudentEmail=rs.getString("email");
                 studentBean.StudentAddress=rs.getString("address");
                 studentBeanList.add(studentBean);
                } 
             if(studentBeanList.size()==0){
                 System.out.println("This no students");
-                return "NO_STAFFS";
+                return "NO_STUDENTS";
             }
                Message="SUCCESS";
                return Message;
@@ -160,37 +150,7 @@ public String listStudents(){
         }
     }
 
-public String listStaffs(){
-        beanList=new ArrayList<StaffBean>();
-        AdminModel staff=new AdminModel();
-     try{
-        ResultSet rs=staff.listStaffs(this);
-        if(rs==null){
-            System.out.println("Null");
-            return "ERROR";}
-        while(rs.next()){
-           staffBean =new StaffBean();
-           staffBean.StaffName=rs.getString("name");
-           staffBean.StaffDob=rs.getString("dob");
-           staffBean.StaffPhone_no=rs.getString("phone_no");
-           staffBean.StaffDepartment=rs.getString("dept");
-           staffBean.StaffEducational_qualification=rs.getString("educational_qualification");
-           staffBean.Staff_Id=rs.getInt("staff_id");
-           staffBean.StaffEmail=rs.getString("email");
-           beanList.add(staffBean);
-           } 
-        if(beanList.size()==0){
-            System.out.println("This no staffs");
-            return "NO_STAFFS";
-        }
-           Message="SUCCESS";
-           return Message;
-        }
-    catch(Exception e){
-        e.printStackTrace();
-        return "ERROR";
-    }
-}
+
 
 public String getStudent(){
     try{
@@ -200,7 +160,7 @@ public String getStudent(){
            return Message;
       }
       else{
-        StudentModel staff=new StudentModel();
+        StaffModel staff=new StaffModel();
         ResultSet rs=staff.getStudent(this);
         if(rs==null){return "ERROR";}
         if(rs.next()){
@@ -209,9 +169,10 @@ public String getStudent(){
             studentBean.StudentDob=rs.getString("dob");
             studentBean.StudentPhone_no=rs.getString("phone_no");
             studentBean.StudentDepartment=rs.getString("dept");
-            studentBean.Student_Id=rs.getInt("student_id");
+            studentBean.Student_id=rs.getInt("student_id");
             studentBean.StudentEmail=rs.getString("email");
             studentBean.StudentAddress=rs.getString("address");
+            setUpdateKey(staff.createUpdateKey(rs.getInt("_id")));
             Message="SUCCESS";
            return Message;
            } 
@@ -225,6 +186,15 @@ public String getStudent(){
            return "ERROR";
         }
 }
+public String deleteStudent(){
+       try {
+        StaffModel staff=new StaffModel();
+        return Codes.stringify(staff.deleteStudent(this));
+       }
+       catch(Exception e){
+           return "ERROR";
+       }
+}
 
 
 
@@ -235,11 +205,11 @@ public String getStudent(){
         switch(ActionType.trim()){
             case "CreateStudent":
                 System.out.println(ActionType.trim());
-                 temp= createStaff();
+                 temp= createStudent();
                  return temp+"CSS";
             case "GetStudent":
                 System.out.println(ActionType.trim());
-                 temp= getStaff();
+                 temp= getStudent();
                  return temp+"GSS";
 
             case "UpdateStaff":
@@ -249,17 +219,17 @@ public String getStudent(){
 
             case "DeleteStudent":
                 System.out.println(ActionType.trim());
-                 temp=deleteStaff();
+                 temp=deleteStudent();
                  return temp+"DSS";
 
             case "ListStudents":
                 System.out.println(ActionType.trim());
-                 temp= listStaffs();
+                 temp= listStudents();
                  return temp+"LSS";
 
-            case "UpdateStaff":
+            case "UpdateStudent":
                  System.out.println(ActionType.trim());
-                  temp=deleteStaff();
+                  temp=updateStudent();
                   return temp+"DS";
 
             case "GetStaff":

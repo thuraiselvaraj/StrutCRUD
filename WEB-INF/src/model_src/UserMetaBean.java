@@ -3,6 +3,7 @@ public class UserMetaBean {
     private int Id;
     private byte Type;
     private String SessionKey="";
+    private String StaffDepartment="";
 
     public void setSessionKey(String SessionKey){
         this.SessionKey=SessionKey;
@@ -10,6 +11,14 @@ public class UserMetaBean {
 
     public String getSessionKey(){
         return SessionKey;
+    }
+
+    public void setStaffDepartment(String StaffDepartment){
+        this.StaffDepartment=StaffDepartment;
+    }
+
+    public String getStaffDepartment(){
+        return StaffDepartment;
     }
 
     public int getId(){
@@ -27,4 +36,6 @@ public class UserMetaBean {
     public void setType(byte Type){
         this.Type=Type;
     }
+
+
 }
