@@ -104,14 +104,13 @@ public String getStaff(){
 
 
 public String listStudents(){
-            studentBeanList=new ArrayList<StudentBean>();
+            boolean stExists=false;
             StaffModel staff=new StaffModel();
-         try{
+           try{
             ResultSet rs=staff.listStudents(this);
-            if(rs==null){
-                System.out.println("Null");
-                return "ERROR";}
+            studentBeanList=new ArrayList<StudentBean>();
             while(rs.next()){
+                
                 studentBean =new StudentBean();
                 studentBean.StudentName=rs.getString("name");
                 studentBean.StudentDob=rs.getString("dob");
@@ -121,14 +120,12 @@ public String listStudents(){
                 studentBean.StudentEmail=rs.getString("email");
                 studentBean.StudentAddress=rs.getString("address");
                 studentBeanList.add(studentBean);
-               } 
-            if(studentBeanList.size()==0){
-                System.out.println("This no students");
-                return "NO_STUDENTS";
-            }
-               Message="SUCCESS";
-               return Message;
-            }
+                stExists=true;
+             } 
+            if(stExists) Message="SUCCESS";
+            else Message="EMPTY_STUDENTS";
+            return Message;
+         }
         catch(Exception e){
             e.printStackTrace();
             return "ERROR";

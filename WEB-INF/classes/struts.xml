@@ -17,18 +17,18 @@
          <action name="login" class="com.actions.LoginAction" method="login">
         
          <result name="ADMIN" type="redirectAction">
-         admin.action?ActionType=GetHome&amp;SessionKey=${UserMeta.SessionKey}
+         admin.action?ActionType=GetHome
          </result>
 
          <result name="STUDENT" type="redirectAction">
-         student.action?ActionType=GetStudent&amp;SessionKey=${UserMeta.SessionKey}
+         student.action?ActionType=GetStudent
          </result>
 
          <result name="STAFF" type="redirectAction">
-        staff.action?ActionType=GetHome&amp;SessionKey=${UserMeta.SessionKey}
+        staff.action?ActionType=GetHome
          </result>
           
-         <result name="*" type="redirect">
+         <result name="*" >
          <param name="location">/login.jsp</param>
          <param name="Message">${Message}</param>
          </result>
@@ -39,7 +39,7 @@
          <action name="admin"  class="com.actions.AdminAction" method="exec">
          <interceptor-ref name="myStack"></interceptor-ref>  
          <result name="SUCCESSCS" type="redirectAction" >
-                admin.action?ActionType=GetHome&amp;SessionKey=${UserMeta.SessionKey}
+                admin.action?ActionType=GetHome
          </result>
 
          <result name="SUCCESSSF" >
@@ -48,7 +48,7 @@
 
 
          <result name="SUCCESSUS" type="redirectAction">
-              /StrutCRUD/admin.action?ActionType=ListStaffs&amp;SessionKey=${UserMeta.SessionKey}
+              /StrutCRUD/admin.action?ActionType=ListStaffs
          </result>
 
          <result name="SUCCESSGS" >
@@ -61,14 +61,14 @@
          </result>
 
           <result name="SUCCESSDS" type="redirectAction">
-              /StrutCRUD/admin.action?ActionType=ListStaffs&amp;SessionKey=${UserMeta.SessionKey}
+              /StrutCRUD/admin.action?ActionType=ListStaffs
          </result>
 
          <result name="SUCCESSGH" >
                 /views/adminHome.jsp
          </result>
 
-         <result name="*" type="redirect">
+         <result name="*" >
                views/dummy.jsp?Message=${Message}
          </result>
          </action>
@@ -77,7 +77,7 @@
           <action name="staff"  class="com.actions.StaffAction" method="exec">
           <interceptor-ref name="myStack"></interceptor-ref>  
          <result name="SUCCESSCSS" type="redirectAction">
-                 staff.action?ActionType=GetHome&amp;SessionKey=${UserMeta.SessionKey}
+                 staff.action?ActionType=GetHome
          </result>
 
          <result name="SUCCESSGH" >
@@ -85,7 +85,7 @@
          </result>
 
          <result name="SUCCESSUSS" type="redirectAction">
-              staff.action?ActionType=ListStudents&amp;SessionKey=${UserMeta.SessionKey}
+              staff.action?ActionType=ListStudents
          </result>
 
          <result name="SUCCESSGSS" >
@@ -97,7 +97,7 @@
          </result>
 
           <result name="SUCCESSDSS" type="redirectAction">
-              staff.action?ActionType=ListStudents&amp;SessionKey=${UserMeta.SessionKey}
+              staff.action?ActionType=ListStudents
          </result>
 
          <result name="SUCCESSGS" >
@@ -105,7 +105,7 @@
          </result>
 
          <result name="SUCCESSUS" type="redirectAction" >
-                 staff.action?ActionType=GetHome&amp;SessionKey=${UserMeta.SessionKey}
+                 staff.action?ActionType=GetHome
          </result>
 
          <result name="SUCCESSDS" >
@@ -117,7 +117,7 @@
          </result>
 
 
-         <result name="*" type="redirect">
+         <result name="*" >
                views/dummy.jsp?Message=${Message}
          </result>
          </action>
@@ -128,16 +128,22 @@
               /views/studentHome.jsp
          </result>
 
-         <result name="*" type="redirect">
+         <result name="*" >
                views/dummy.jsp?Message=${Message}
          </result>
 
          </action>
 
+         <action name="logout"  class="com.actions.LogOutAction" method="logout">
+         <interceptor-ref name="myStack"></interceptor-ref>  
+         <result name="SUCCESS" type="redirect" >
+                /login.jsp
+         </result>
 
-        
-
-
+         <result name="*" >
+               views/dummy.jsp?Message=${Message}
+         </result>
+         </action>
 
     </package>
 </struts>

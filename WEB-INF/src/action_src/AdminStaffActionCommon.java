@@ -8,7 +8,7 @@ public class AdminStaffActionCommon extends ActionSupport implements GetMeta{
     public String StaffName;
     public String StaffDob;
     public String StaffPhone_no;
-    public String StaffDepartment;
+    public String StaffDepartment="";
     public String StaffEducational_qualification;
     public String Message="ERROR";
     public String ActionType="";

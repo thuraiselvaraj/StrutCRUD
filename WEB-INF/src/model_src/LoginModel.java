@@ -6,9 +6,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSetMetaData;
 import java.sql.PreparedStatement;
+import javax.servlet.http.Cookie;
 import com.security.Security;
 
-public class LoginModel implements Codes{
+public class LoginModel implements Codes {
     Connection con ;
 
     public LoginModel(){
@@ -31,9 +32,12 @@ public class LoginModel implements Codes{
             ps.close();
             if(laction.getEmail().equals(Email)){
                 if(laction.getPassword().equals(Password)){
-                    laction.getUserMeta().setSessionKey(createSession(Id,TYPE));
+                    String session_key=createSession(Id,TYPE);
+                    Cookie cookie=new Cookie("SessionKey",session_key);
+                    laction.getUserMeta().setSessionKey(session_key);
                     laction.getUserMeta().setType(TYPE);
                     laction.getUserMeta().setId(Id);
+                    laction.getServletResponse().addCookie(cookie);
                     return SUCCESS;
                 }
                 else{
@@ -58,6 +62,7 @@ public class LoginModel implements Codes{
             ps.setInt(3, type);
             ps.executeUpdate();
             ps.close();
+            
             return SessionKey;
         }
         catch(Exception e){
@@ -71,15 +76,38 @@ public class LoginModel implements Codes{
     }
 
 
-    public void deleteSession(String SessionKey){
+    public byte deleteSession(String SessionKey){
         try{
             PreparedStatement ps=con.prepareStatement("delete from session_table where session_key=?");
             ps.setString(1,SessionKey);
             ps.executeUpdate();
             ps.close();
+            return SUCCESS;
         }
         catch(Exception e){
             e.printStackTrace();
+            return ERROR;
         }
-    }    
+    }   
+    
+    public byte deleteAllSession(String SessionKey){
+        try{
+            PreparedStatement ps=con.prepareStatement("select _id from session_table where session_key=?");
+            ps.setString(1,SessionKey);
+            ResultSet rs=ps.executeQuery();
+            if(rs.next()){
+                rs.close();
+                ps=con.prepareStatement("delete from session_table where _id=?");
+                ps.setInt(1, rs.getInt("_id"));
+                ps.executeUpdate();
+                ps.close();
+                return SUCCESS;
+            }
+            return NO_SUCCESS;
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return ERROR;
+        }
+    } 
 }

@@ -4,7 +4,19 @@ import com.models.UserMetaBean;
 import com.security.Security;
 import com.models.Codes;
 import com.opensymphony.xwork2.ActionSupport;
-public class LoginAction extends ActionSupport{
+import org.apache.struts2.interceptor.ServletResponseAware;
+import javax.servlet.http.HttpServletResponse;
+public class LoginAction extends ActionSupport implements ServletResponseAware {
+    private HttpServletResponse response;
+     
+    @Override
+    public void setServletResponse(HttpServletResponse response) {
+        this.response = response;
+    }
+    
+    public HttpServletResponse getServletResponse(){
+        return response;
+    }
 
     private String Email="";
     private String Password="";
@@ -39,6 +51,7 @@ public class LoginAction extends ActionSupport{
     public String getPassword(){
         return Password;
     }
+    
 
     public String login(){
         LoginModel lmodel=new LoginModel();

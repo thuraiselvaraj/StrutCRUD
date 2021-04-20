@@ -46,7 +46,7 @@
 			There is no details.
 		</s:else>
 
-
+		<a href='/StrutCRUD/logout.action'>logout</a></br>
 
 
 

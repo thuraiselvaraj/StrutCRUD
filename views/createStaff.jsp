@@ -5,7 +5,7 @@
    </head>
    <body>
       <h2>CreateStaff</h2>
-<form action='/StrutCRUD/admin?ActionType=CreateStaff&SessionKey=<s:property value="SessionKey"/>' method="post">
+<form action='/StrutCRUD/admin?ActionType=CreateStaff' method="post">
 <br/>Name:         </b><input type="text" name="StaffName" >
 <br/>Email:        </b><input type="email"  name="StaffEmail" >  //set this to read only in staff user.
 <br/>Department:  </b><input type="text" name="StaffDepartment" >

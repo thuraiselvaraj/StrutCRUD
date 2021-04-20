@@ -12,6 +12,7 @@
 <br/>Phone_no:     </b><s:property value="studentBean.StudentPhone_no"/>
 <br/>Address:</b><s:property value="studentBean.StudentAddress"/>
 <br/>Student_Id</b><s:property value="studentBean.Student_id"/>
+<br/><a href='/StrutCRUD/logout.action'>logout</a></br>
 </form>
    </body>
 </html>

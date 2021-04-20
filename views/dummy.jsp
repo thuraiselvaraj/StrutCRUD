@@ -1,1 +1,4 @@
-<h2>Dummy</h2>
+<%@taglib prefix="s" uri="/struts-tags"%>
+<html>
+
+    <s:property value="Message"/>

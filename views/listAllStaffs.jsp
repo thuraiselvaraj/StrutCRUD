@@ -29,10 +29,10 @@
 						<td><s:property value="StaffPhone_no" /></td>
 						<td><s:property value="StaffEducational_qualification" /></td>
 						<td>
-							<a href='admin.action?ActionType=GetStaff&StaffEmail=<s:property value="StaffEmail"/>&SessionKey=<s:property value="SessionKey"/>'>
+							<a href='admin.action?ActionType=GetStaff&StaffEmail=<s:property value="StaffEmail"/>'>
 								<button class="button-update">Edit</button>
 							</a>
-							<a href='admin.action?ActionType=DeleteStaff&StaffEmail=<s:property value="StaffEmail"/>&SessionKey=<s:property value="SessionKey"/>'>
+							<a href='admin.action?ActionType=DeleteStaff&StaffEmail=<s:property value="StaffEmail"/>'>
 								<button class="button-delete">Delete</button>
 							</a>
 						</td>
@@ -46,7 +46,7 @@
 			There is no details.
 		</s:else>
 
-
+		<a href='/StrutCRUD/logout.action'>logout</a></br>
 
 
 

@@ -154,8 +154,7 @@ public byte updateStudent(StaffAction staff){
        }
 
 
-public ResultSet listStudents(StaffAction student){
-    try{
+public ResultSet listStudents(StaffAction student) throws Exception{
       setStaffDepartment(student.getUserMeta());
       PreparedStatement ps=con.prepareStatement("select student_details.*,login_table.email, d.dept from login_table join student_details  using(_id) join dept_student_map s using (student_id) join department d on d._id=s.d_id where d.dept=? order by login_table._id limit 10 offset ?");
       ps.setString(1,student.getUserMeta().getDepartment());
@@ -168,12 +167,6 @@ public ResultSet listStudents(StaffAction student){
         }
       return ps.executeQuery();
     }
-    catch(Exception e){
-        e.printStackTrace();
-        return null;
-    }
-}
-
 
 public byte updateStaff(StaffAction staff){
     try{                

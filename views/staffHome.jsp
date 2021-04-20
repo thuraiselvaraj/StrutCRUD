@@ -9,10 +9,12 @@
     </head>
     <body>
       <p>Staff Home</p>
-      <a href='/StrutCRUD/staff.action?ActionType=GetStaff&SessionKey=<s:property value="SessionKey"/>'>Edit your details</a></br>
-      <a href='/StrutCRUD/staff.action?ActionType=ListStudents&SessionKey=<s:property value="SessionKey"/>'>List all students</a></br>
-      <a href='/StrutCRUD/staff.action?ActionType=DisplayStaff&SessionKey=<s:property value="SessionKey"/>'>Get Self Details</a></br>
-      <a href='/StrutCRUD/staff.action?ActionType=StuForm&SessionKey=<s:property value="SessionKey"/>'>Create Student</a></br>
+      <a href='/StrutCRUD/staff.action?ActionType=GetStaff'>Edit your details</a></br>
+      <a href='/StrutCRUD/staff.action?ActionType=ListStudents'>List all students</a></br>
+      <a href='/StrutCRUD/staff.action?ActionType=DisplayStaff'>Get Self Details</a></br>
+      <a href='/StrutCRUD/staff.action?ActionType=StuForm'>Create Student</a></br>
+
+      <a href='/StrutCRUD/logout.action'>logout</a></br>
     </body>
 </html>
    

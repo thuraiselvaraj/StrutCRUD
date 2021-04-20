@@ -5,7 +5,7 @@
    </head>
    <body>
       <h2>CreateStudent</h2>
-<form action='/StrutCRUD/staff.action?ActionType=CreateStudent&SessionKey=<s:property value="SessionKey"/>' method="post">
+<form action='/StrutCRUD/staff.action?ActionType=CreateStudent' method="post">
 <br/>Name:         </b><input type="text" name="StudentName" >
 <br/>Email:        </b><input type="email"  name="StudentEmail" >
 <br/>DOB :         </b><input type="date" name="StudentDob" >

@@ -40,6 +40,10 @@ public class AdminAction extends AdminStaffActionCommon implements Codes{
             Message="EMPTY_STAFF_ID";
             return Message;
         }
+        else if(this.StaffDepartment.equals("")){
+            Message="EMPTY_STAFF_DEPARTMENT";
+            return Message;
+        }
         else{
             AdminModel admin=new AdminModel();
             byte Result=admin.createStaff(this);
@@ -56,6 +60,10 @@ public class AdminAction extends AdminStaffActionCommon implements Codes{
         }
         else if(this.Staff_Id==null){
             Message="EMPTY_STAFF_ID";
+            return Message;
+        }
+        else if(this.StaffDepartment.equals("")){
+            Message="EMPTY_STAFF_DEPARTMENT";
             return Message;
         }
         else{
@@ -100,13 +108,11 @@ public class AdminAction extends AdminStaffActionCommon implements Codes{
          }
         }
     public String listStaffs(){
-        beanList=new ArrayList<StaffBean>();
+        boolean stExists=false;
         AdminModel admin=new AdminModel();
      try{
         ResultSet rs=admin.listStaffs(this);
-        if(rs==null){
-            System.out.println("Null");
-            return "ERROR";}
+        beanList=new ArrayList<StaffBean>();
         while(rs.next()){
            staffBean =new StaffBean();
            staffBean.StaffName=rs.getString("name");
@@ -117,12 +123,11 @@ public class AdminAction extends AdminStaffActionCommon implements Codes{
            staffBean.Staff_Id=rs.getInt("staff_id");
            staffBean.StaffEmail=rs.getString("email");
            beanList.add(staffBean);
+           stExists=true;
+           System.out.println("Looping"+stExists);
            } 
-        if(beanList.size()==0){
-            System.out.println("This no staffs");
-            return "NO_STAFFS";
-        }
-           Message="SUCCESS";
+           if(stExists) Message="SUCCESS";
+           else Message="EMPTY_STAFFS";
            return Message;
         }
     catch(Exception e){
